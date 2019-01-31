@@ -1,0 +1,98 @@
+
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500');
+
+html{
+    font-size: 62.5%;
+}
+body {
+    background-color: #f9f9fc; 
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.6rem; 
+    padding: 110px 0 0px;
+}
+
+.navbar{
+   padding: 1.7rem 2rem;
+   background-color:#fff;
+   box-shadow :0px 0px 40px 0px rgba(82, 63, 105, 0.1);
+}
+
+
+.navbar-brand{
+    color: #3e508a;
+    font-size: 2rem;
+}
+.nav-link{
+    color: #6c7293;
+    font-weight: 500;
+    font-size: 1.4rem;
+}
+.btn-primary{
+    background: #48bef7;
+    border-color: #29B6F6;
+    color:#fff;
+}
+
+.card{
+    box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
+    background-color: #ffffff;
+    border:0;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    padding: 0 25px;
+}
+
+.c-portlet{
+    display: -webkit-box;
+   display: -ms-flexbox;
+   display: flex;
+   -webkit-box-flex: 1;
+   -ms-flex-positive: 1;
+   flex-grow: 1;
+   -webkit-box-orient: vertical;
+   -webkit-box-direction: normal;
+   -ms-flex-direction: column;
+   flex-direction: column;
+   padding: 24px;
+}
+
+.c-portlet--height-fluid-half{
+    height: calc(50% - 20px);
+}
+
+.c-portlet--height-fluid{
+    height: calc(100% - 20px);
+}
+.c-portlet-title{
+   font-weight: 600;
+   color: #a1a8c3;
+   text-transform: uppercase;
+   font-size: 1.6rem;
+}
+.c-portlet-value{
+    font-size: 3rem;
+    font-weight: 500;
+    color: #424869;
+    margin-top: 3rem;
+}
+.c-portlet-changesInValue{
+    font-size: 1.3rem;
+    color: #42486990;
+    margin-top: 0.3rem;
+}
+.c-portlet-changesInValue.value__up span{
+    color:#41C742;
+}
+.c-portlet-changesInValue.value__down span{
+    color:#F46565;
+}
+/* Media queries */
+
+@media (min-width: 576px){
+    .navbar-expand-sm .navbar-nav .nav-link {
+        padding-right: 1.4rem !important;
+        padding-left: 1.4rem !important;
+        margin: 0  0.6rem;
+    }
+}

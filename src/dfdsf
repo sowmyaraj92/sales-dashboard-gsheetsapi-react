@@ -1,0 +1,87 @@
+       {/* The KPI Renders here */}
+
+
+        <div className="row mt-5 mt-xs-4">
+          <div className="col-12 mb-3">
+            <div className ="card-deck custom-card-deck">
+
+            <div className="card mr-0 custom-card">
+                <div className="card-body">
+                <h2 className="card-title mb-4 ">Revenue Target</h2>
+                <h2 className="mb-1 text-primary">${this.state.targetRevenue}</h2>
+                <h6 className="card-title mb-4 "> XYZ % of target achieved</h6>
+                {/* <p className="card-text"><small className="text-muted">(Price in Million)</small></p> */}
+                </div>
+                </div> 
+
+              <div className="card mr-0 custom-card">
+                <div className="card-body">
+                <h2 className="card-title mb-4 ">Revenue</h2>
+                <h2 className="mb-1 text-primary">${this.state.targetDeal}</h2>
+                <h6 className="card-title mb-4 "> ABC % of pipeline converted</h6>
+                {/* <p className="card-text"><small className="text-muted">(Price in Million)</small></p> */}
+                </div>
+                </div> 
+              
+              <div className="card mr-0 custom-card">
+                <div className="card-body">
+                <h2 className="card-title mb-4 ">Pipeline</h2>
+                <h2 className="mb-1 text-primary">${this.state.dealsWon}</h2>
+                <h6 className="card-title mb-4 ">Deals : ABC</h6>
+                <h6 className="card-title mb-4 "> ABC % of opportunities in pipeline</h6>
+
+                {/* <p className="card-text"><small className="text-muted">(Total deals won for the year)</small></p> */}
+                </div>
+              </div>
+          
+              <div className="card mr-0 custom-card">
+                <div className="card-body">
+                <h2 className="card-title mb-4 ">Opportunities</h2>
+                <h2 className="mb-1 text-primary">{this.state.dealClosed}</h2>
+
+                <h6 className="card-title mb-4 ">Sourced : XYZ</h6>
+                <h6 className="card-title mb-4 ">Closed : ABC</h6>
+                <h6 className="card-title mb-4 ">ABC  % of leads converted to opportunities </h6>
+                {/* <p className="card-text"><small className="text-muted">(Total Number of Deals closed )</small></p> */}
+                </div>
+              </div>
+           
+              <div className="card mr-0 custom-card">
+                <div className="card-body">
+              <h2 className="card-title mb-4 ">Leads</h2>
+              <h2 className="mb-1 text-primary">{this.state.leads}</h2>
+              <h2 className="mb-1 text-primary">{this.state.prevLeads}</h2>
+              <h6 className="card-title mb-4 "> - % of increase from last month</h6>
+              <p className="card-text"><small className="text-muted">(Total Clients - Contacted & New)</small></p>
+                </div>
+              </div>
+            </div>  
+          </div> 
+        </div>             
+
+    { /*Chart Renders here */}
+
+                {/* <div className="col-12"> */}
+                <div className="row mt-5 mt-xs-4">
+          <div className="col-12 mb-3">
+            <div className ="card-deck custom-card-deck">
+
+                   
+                      <div className="card custom-card mb-5 mb-xs-4">
+                        <div className="card-body" id ="chart-container"> 
+                        <ReactFC {...this.state.bubbleData} /> 
+                      </div> 
+                    </div>
+                
+                      <div className="card custom-card mb-5 mb-xs-4">
+                        <div className="card-body" >
+                        <ReactFC {...this.state.mapData}/>
+                        </div>
+                    </div>
+                    <div className="card custom-card mb-5 mb-xs-4">
+                        <div className="card-body"> 
+                        <ReactFC {...this.state.mslineData} /> 
+                    </div> 
+                    </div>
+                    
+                 </div>  </div>  </div>
