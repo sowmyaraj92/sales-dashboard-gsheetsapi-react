@@ -5,7 +5,7 @@ html{
     font-size: 62.5%;
 }
 body {
-    background-color: #f9f9fc; 
+    background: #19222a;  /* fallback for old browsers */
     font-family: 'Poppins', sans-serif;
     font-size: 1.6rem; 
     padding: 110px 0 0px;
@@ -13,19 +13,23 @@ body {
 
 .navbar{
    padding: 1.7rem 2rem;
-   background-color:#fff;
+   background-color:#141c21;
    box-shadow :0px 0px 40px 0px rgba(82, 63, 105, 0.1);
 }
 
 
 .navbar-brand{
-    color: #3e508a;
+    color: #fff;
     font-size: 2rem;
 }
 .nav-link{
-    color: #6c7293;
-    font-weight: 500;
-    font-size: 1.4rem;
+    color: #ffffff95;
+    font-size: 1.5rem;
+    letter-spacing: 0.025rem;
+    cursor: pointer;
+}
+.nav-link:hover{
+    color: #ffffff;
 }
 .btn-primary{
     background: #48bef7;
@@ -35,14 +39,16 @@ body {
 
 .card{
     box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
-    background-color: #ffffff;
+    background-color: #202731;
     border:0;
     border-radius: 4px;
     margin-bottom: 20px;
     border-radius: 4px;
     padding: 0 25px;
 }
-
+.dropdown-menu{
+    font-size: 1.3rem;
+}
 .c-portlet{
     display: -webkit-box;
    display: -ms-flexbox;
@@ -56,36 +62,55 @@ body {
    flex-direction: column;
    padding: 24px;
 }
+.c-portlet .otherInfo .title{
+    color: #fff;
+    font-size: 1.4rem;
+    opacity: 0.7;
+    letter-spacing: 0.1rem;
+}
+.c-portlet .otherInfo .value{
+    color: #fff;
+    font-size: 1.6rem;
+    letter-spacing: 0.1rem;
+}
+.c-portlet--height-fluid-oneThird{
+    height: calc(33.33% - 20px);
+}
 
 .c-portlet--height-fluid-half{
     height: calc(50% - 20px);
 }
-
+.full-width{
+    width:100%;
+}
 .c-portlet--height-fluid{
     height: calc(100% - 20px);
 }
 .c-portlet-title{
-   font-weight: 600;
-   color: #a1a8c3;
-   text-transform: uppercase;
-   font-size: 1.6rem;
+    color: #9898a7;
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    letter-spacing: 0.05rem;
 }
 .c-portlet-value{
-    font-size: 3rem;
-    font-weight: 500;
-    color: #424869;
-    margin-top: 3rem;
+    font-size: 3.5rem;
+    color: #ffffff;
 }
 .c-portlet-changesInValue{
-    font-size: 1.3rem;
-    color: #42486990;
+    font-size: 1.4rem;
+    color: #ffffff30;
     margin-top: 0.3rem;
+    letter-spacing: 0.1rem;
 }
 .c-portlet-changesInValue.value__up span{
     color:#41C742;
+    font-size: 1.6rem;
 }
 .c-portlet-changesInValue.value__down span{
     color:#F46565;
+}
+.deals{
+    margin-top: 4rem;
 }
 /* Media queries */
 
