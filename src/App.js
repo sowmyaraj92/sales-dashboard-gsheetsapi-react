@@ -44,6 +44,9 @@ class App extends React.Component{
   super();
 
     this.url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=SalesDataSomi&majorDimension=ROWS&key=${config.apiKey}`;
+    
+
+  
 
   // Initialise values 
     this.state = {
@@ -54,6 +57,11 @@ class App extends React.Component{
       showMenu: false,
       targetRevenue: '-',
       leads :'-',
+      // yearByCategory : {
+      //   2018: ["Quarter 9","Quarter 10", "Quarter 11", "Quarter 12"],
+      //   2017: ["Quarter 5", "Quarter 6", "Quarter 7", "Quarter 8"],
+      //   2016: ["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"]
+      // },
 
       opportunitySourced:'-',
       opportunitySourcedVal:'-',
@@ -71,7 +79,7 @@ class App extends React.Component{
       valuesPipeline:'-',
       oppPipelineConverted:'-',
 
-      list1 : []
+     // list1 : []
 
 
       }
@@ -94,6 +102,11 @@ class App extends React.Component{
     let pipelineValue =0;
     let prevleadsVal=0;
 
+
+    
+
+    
+
     //Annual Data
 
     for (let i = 0; i < arrLen; i++) {
@@ -113,7 +126,10 @@ class App extends React.Component{
             chartDataArr.push(arr[i]);
 
               if(targetRevenueFlag===false) {
-                targetRevenueVal=parseInt(arr[i].revenueTarget); 
+               
+                  targetRevenueVal=parseInt(arr[i].revenueTarget_Annual); 
+                  
+                 // console.log("value",targetRevenueVal);
                 targetRevenueFlag = true;
               }
               
@@ -127,8 +143,7 @@ class App extends React.Component{
     for (let i = 0; i < arrLen; i++) {
       let quarterStr = (arr[i])['quarter']; 
           if (quarterStr.includes(arg)) {
-            leadsVal += parseInt(arr[i].leads);
-           // targetRevenueVal+=parseInt(arr[i].revenueTarget);
+            leadsVal += parseInt(arr[i].leads_month);
             oppSourced += parseInt(arr[i].opp_Sourced_month);
             oppSourcedVal += parseInt(arr[i].value_OppSourced_month);
 
@@ -146,7 +161,7 @@ class App extends React.Component{
               }
           }
           else if(quarterStr.includes((parseInt(arg)-1))) {
-            prevleadsVal += parseInt(arr[i].leads); 
+            prevleadsVal += parseInt(arr[i].leads_month); 
           }
     }
       
@@ -154,7 +169,6 @@ class App extends React.Component{
     const pipelineConvert = (oppClosedVal/oppSourcedVal)*100;
     const pipelinePercent = (pipelineConvert).toFixed(2);
 
-  
     //Percent of leads converted to opportunities
     const oppConvert = (oppSourced/leadsVal)*100;
     const oppPercent =(oppConvert).toFixed(2);
@@ -169,6 +183,7 @@ class App extends React.Component{
     const  oppPipelinePercent =(oppPipelineConvert).toFixed(2);
 
     //Lead increase percentage
+    
     const Leads = ((leadsVal-prevleadsVal)/prevleadsVal)*100;
     const centLeads = (Leads).toFixed(2);
 
@@ -189,7 +204,6 @@ class App extends React.Component{
 
     const chartConfigs1 = {
       type: 'stackedcolumn2d',
-       //containerBackgroundOpacity: "0",
       width: '100%',
       height: '100%',
       dataFormat: 'json',
@@ -203,7 +217,6 @@ class App extends React.Component{
           "yAxisName": "Price in USD",
           "yNumberPrefix": "$",
           "plotFillAlpha": "70",
-          // "plotFillHoverColor": "#6baa01",
           "showPlotBorder": "0",
           "showCanvasBorder": "0",
           "xAxisLabelMode": "AUTO",
@@ -211,7 +224,6 @@ class App extends React.Component{
           "valueFontSize": "10",
           "numDivlines": "2",
           "bgAlpha": "0",
-         // "canvasBgAlpha": "0"
         },
         "categories": [
           {
@@ -241,7 +253,7 @@ class App extends React.Component{
     for (let i=0; i<chartDataArrLen; i++) {
 
       mapChart_xAxis.push({label: chartDataArr[i].quarters_plot});
-      mapChart_yAxis.push({value: chartDataArr[i].opp_Closed});
+      mapChart_yAxis.push({value: chartDataArr[i].count_Deals});
       mapChart_zAxis.push({label: chartDataArr[i].region});
     }
 
@@ -254,39 +266,36 @@ class App extends React.Component{
 
   const chartConfigs2 = {
       type : "world",
-      //containerBackgroundOpacity: "0",
        width : '100%',
        height : '150%',
        dataFormat : "JSON",
        dataSource :{
         "chart": {
           "caption": "Sales Statistics",
-          //"yaxisname": "Growth",
+         
           "numbersuffix": "%",
           "theme": "fusion",
-          "palettecolors": "FB8C00",
           "bgAlpha": "0",
-          //"canvasBgAlpha": "0"
         },
         "colorrange": {
           "minvalue": "0.5",
-          "code": "#5D62B5",
+          "code": "#E81A59",
           "gradient": "1",
           "color": [
           {
-            "displayvalue": "100+ Opps Closed",
-            "maxvalue": "120",
-            "code": "#F3726F"
+            "displayvalue": "0-50",
+            "maxvalue": "50",
+            "code": "#6957DA"
           },
           {
-            "maxvalue": "99",
-            "displayvalue": "80+ Opps Closed",
-            "code": "#FFC555"
+            "maxvalue": "200",
+            "displayvalue": "51-200",
+            "code": "#48BD86"
           },
           {
-            "maxvalue": "79",
-            "displayvalue": "70+ Opps Closed",
-            "code": "#61B68E"
+            "maxvalue": "1000",
+            "displayvalue": "200+",
+            "code": "#E81A59"
           }
         ]},
           "data": [
@@ -313,7 +322,8 @@ class App extends React.Component{
             { "id": "AU",
              "value": 37,
               "showLabel": "1" }
-        ]
+        ],
+        
       }
 
   };
@@ -348,8 +358,7 @@ class App extends React.Component{
           "xAxisName": "Month ",
           "yAxisName": "Deals won",
           "showvalues": "0",
-          "labeldisplay": "ROTATE",
-          "slantlabels": "1",
+         "slantlabels": "1",
           "numberPrefix": "$",
           "divLineAlpha": "40",
           "anchoralpha": "0",
@@ -415,22 +424,91 @@ class App extends React.Component{
    
   }
 
+
 //Add a function for Year,Quarter and Month 
 
   updateDashboard = (event) => {
-
-    if(event.target.id === 'btn-2018')
+    if(event.target.id === 'btn-2018'){
+   //  event.target.value = document.getElementById("btn-2018").value;
       this.getData('2018');
-    else if(event.target.id === 'btn-2017') 
-    this.getData('2017');
-    else if(event.target.id === 'btn-2016') 
-    this.getData('2016');
+      this.filterQuarters('2018');
+    }
+     
+    else if(event.target.id === 'btn-2017') {
+     // event.target.value = document.getElementById("btn-2017").value;
+      this.getData('2017');
+      this.filterQuarters('2017');
+    }
+    else if(event.target.id === 'btn-2016') {
+    document.getElementById("btn-2016").value = this.getData('2016');
+      this.getData('2016');
+      this.filterQuarters('2016');
+    }
+  
      }
+
+     filterQuarters =(value) =>{
+       if(value ==='2016')
+       {
+        document.getElementById('btn-q1').style.display ="block";
+        document.getElementById('btn-q2').style.display ="block";
+        document.getElementById('btn-q3').style.display ="block";
+        document.getElementById('btn-q4').style.display ="block";
+        document.getElementById('btn-q5').style.display ="none";
+        document.getElementById('btn-q6').style.display ="none";
+        document.getElementById('btn-q7').style.display ="none";
+        document.getElementById('btn-q8').style.display ="none";
+
+        document.getElementById('btn-q9').style.display ="none";
+        document.getElementById('btn-q10').style.display ="none";
+        document.getElementById('btn-q11').style.display ="none";
+        document.getElementById('btn-q12').style.display ="none";
+
+       }
+
+      else if(value ==='2017')
+       {
+        document.getElementById('btn-q1').style.display ="none";
+        document.getElementById('btn-q2').style.display ="none";
+        document.getElementById('btn-q3').style.display ="none";
+        document.getElementById('btn-q4').style.display ="none";
+        document.getElementById('btn-q5').style.display ="block";
+        document.getElementById('btn-q6').style.display ="block";
+        document.getElementById('btn-q7').style.display ="block";
+        document.getElementById('btn-q8').style.display ="block";
+        document.getElementById('btn-q9').style.display ="none";
+        document.getElementById('btn-q10').style.display ="none";
+        document.getElementById('btn-q11').style.display ="none";
+        document.getElementById('btn-q12').style.display ="none";
+       }
+       else if(value ==='2018')
+       {
+        document.getElementById('btn-q1').style.display ="none";
+        document.getElementById('btn-q2').style.display ="none";
+        document.getElementById('btn-q3').style.display ="none";
+        document.getElementById('btn-q4').style.display ="none";
+        document.getElementById('btn-q5').style.display ="none";
+        document.getElementById('btn-q6').style.display ="none";
+        document.getElementById('btn-q7').style.display ="none";
+        document.getElementById('btn-q8').style.display ="none";
+        document.getElementById('btn-q9').style.display ="block";
+        document.getElementById('btn-q10').style.display ="block";
+        document.getElementById('btn-q11').style.display ="block";
+        document.getElementById('btn-q12').style.display ="block";
+
+       }
+        
+     }
+     
 
      updateDashboardQuarter = (event) => {
 
-      if(event.target.id === 'btn-q1') 
+      if(event.target.id === 'btn-q1') {
+        document.getElementById('btn-q1').value = event.target.id;
+        console.log(event.target.id);
         this.getData('Quarter 1');
+      }
+    
   
         else if(event.target.id === 'btn-q2')
         this.getData('Quarter 2');
@@ -479,7 +557,6 @@ class App extends React.Component{
         }
         rows.push(rowObject);
       }
-      //event.target.id =btn-Oct
       this.setState({ items: rows }, () => this.getData('2018')); 
       
     });
@@ -490,20 +567,23 @@ class App extends React.Component{
       <div className="App">
       { /* Navigation Bar */}   
       <nav className ="navbar navbar-expand-sm text-sm-center text-md-left fixed-top">
-            <a href="/" className="navbar-brand">Sales Dashboard</a>  
+            <div className="navbar-brand">Sales Dashboard</div>  
               <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
               </button>
+              
+
+              
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ml-auto">
 
                     <li className="nav-item dropdown">
-                    <div className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div className="nav-link dropdown-toggle" id="navbarDropdown" onChange="ChangeSecondList(this.options[this.SelectedIndex].value)" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Year
                       </div>
 
                       <div className="dropdown-menu" for="navbarDropdown" aria-labelledby="navbarDropdown">
-                        <option id ="btn-2018" onClick ={this.updateDashboard}className="dropdown-item">2018</option>
+                        <option id ="btn-2018" onClick ={this.updateDashboard} className="dropdown-item">2018</option>
                         <option id ="btn-2017" onClick ={this.updateDashboard} className="dropdown-item">2017</option>
                         <option id ="btn-2016"onClick ={this.updateDashboard} className="dropdown-item">2016</option>
                       </div>
@@ -512,7 +592,7 @@ class App extends React.Component{
 
                      <li className="nav-item dropdown">
                      
-                    <div className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div className="nav-link dropdown-toggle" id="list-quarter" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select Quarter
                    </div>
                       <div className="dropdown-menu" for="navbarDropdown" aria-labelledby="navbarDropdown">
@@ -534,16 +614,21 @@ class App extends React.Component{
                   </ul>
                 </div>  
         </nav> 
-                     
+
+         <div href="/" className="navbar-brand">Overview</div>             
 
         {/* 1st block */}
         <div className="container-fluid pl-md-5 pr-md-5">
             <div className="row">
               <div className="col-md-6 col-xl-4 order-xs-1 order-lg-1 order-xl-1">
                 <div className="card c-portlet c-portlet--height-fluid-half d-flex align-items-start flex-column">
-                  
+                < img src={'/revenuetarget.svg'} alt="fireSpot" className = "img-responsive float-right "/>
+
                          <div className=" mb-auto"> 
-                            <p className="c-portlet-title">Revenue Target </p>
+                         
+
+                            <p className="c-portlet-title">Revenue Target</p>
+                            
                             </div>
 
                           <div className="">
@@ -551,15 +636,25 @@ class App extends React.Component{
                               <span className="h1">$</span> {this.state.targetRevenue}
                               </div>
 
-                              <div className="c-portlet-changesInValue value__up">
+                              <div className="c-portlet-changesInValue value__down">
                                 <span className="">{this.state.targetAchieved}%</span>&nbsp;&nbsp;of target achieved
                               </div>  
+                              <div className="progress">
+                                <div className="progress-bar progress-bar-danger"
+                                 role="progressbar" aria-valuenow="70"
+                                  aria-valuemin="0" aria-valuemax="100" 
+                                  width="100%">75% Complete
+                                 </div>
+                              </div>
                           </div> 
                    
                 </div>
                 <div className="card c-portlet c-portlet--height-fluid-half d-flex align-items-start flex-column">
+                < img src={'/revenue.svg'} alt="fireSpot" className = "img-responsive float-right "/>
                 <div className=" mb-auto"> 
-                      <p className="c-portlet-title">Revenue</p></div>
+             
+
+                      <p className="c-portlet-title" >Revenue</p></div>
                       <div className="">
                       <div className="c-portlet-value">
                       <span className="h1">$</span> {this.state.opportunityClosedVal}
@@ -568,6 +663,13 @@ class App extends React.Component{
                       <div className="c-portlet-changesInValue value__up">
                          <span className="">{this.state.pipelineConverted} %</span>&nbsp;&nbsp; of pipeline converted
                       </div>
+                      <div className="progress">
+                                <div className="progress-bar progress-bar-danger"
+                                 role="progressbar" aria-valuenow="60"
+                                  aria-valuemin="0" aria-valuemax="100" 
+                                  width="100%">60% Complete
+                                 </div>
+                              </div>
                   </div>
                 </div>
               </div>
@@ -585,18 +687,29 @@ class App extends React.Component{
               </div>
               <div className="col-md-6 col-xl-4 order-1 order-md-1 order-xl-1 ">
                   <div className="card c-portlet c-portlet--height-fluid d-flex align-items-start flex-column">
+                  < img src={'/pipeline.svg'} alt="fireSpot" className = "img-responsive float-right "/>
+                     
                       <div className="mb-auto">
                           <p className="c-portlet-title">Pipeline</p></div>
-                        <div>
-                          <div className="c-portlet-value">
-                           <span className="h1">$</span> {this.state.opportunitySourcedVal}
-                          </div>
                           <div className="c-portlet-changesInValue value__up">
                             <span className="">{this.state.oppPipelineConverted}%</span>&nbsp;&nbsp;of opportunities in pipeline
                           </div>
+                        <div>
+                          <div className="c-portlet-value">
+                           <span className="h1">$</span> {this.state.opportunitySourcedVal}
+                        <span>so far</span></div>
+                         
+                        <div className="progress">
+                                <div className="progress-bar progress-bar-info"
+                                 role="progressbar" aria-valuenow="70"
+                                  aria-valuemin="0" aria-valuemax="100" 
+                                  width="100%">50% Complete
+                                 </div>
+                              </div>
                           <div className="deals">
+                          < img src={'/arrow.svg'} alt="fireSpot" className = "img-responsive float-left "/>
                           <div className="otherInfo d-flex row">
-                             <div className="col"><span className="title">Deals :</span> <span className="value">{this.state.dealsPipeline}</span></div>
+                             <div className="col"><span className="title">DEALS :</span> <span className="value">{this.state.dealsPipeline}</span></div>
                             
                           </div>
                            
@@ -613,32 +726,60 @@ class App extends React.Component{
               </div>
               <div className="col-md-6 col-xl-4 order-2 order-md-1 order-xl-1 ">
                 <div className="card c-portlet c-portlet--height-fluid-half d-flex align-items-start flex-column">
+                < img src={'/opportunity.svg'} alt="fireSpot" className = "img-responsive float-right "/>
+                  
                   <div className="mb-auto">
-                        <p className="c-portlet-title">Opportunities </p>
+                        <p className="c-portlet-title" >Opportunities </p>
                         </div>
+                         <div className="c-portlet-changesInValue value__up"><span className="">{this.state.oppConverted}%</span>&nbsp;&nbsp;of leads converted to opportunities</div>
+
+                         
                         <div>
+                        <div className="progress">
+                                <div className="progress-bar progress-bar-danger"
+                                 role="progressbar" aria-valuenow="35"
+                                  aria-valuemin="0" aria-valuemax="100" 
+                                  width="100%">35% Complete
+                                 </div>
+                              </div>
                         <div className="full-width">
                           <div className="otherInfo d-flex row">
-                             <div className="col"><span className="title">Sourced :</span> <span className="value">{this.state.opportunitySourced} </span></div>
+                             <div className="col">
+                             < img src={'/arrow.svg'} alt="fireSpot" className = "img-responsive float-left "/>
+                            <span className="title">SOURCED :</span> <span className="value">{this.state.opportunitySourced} </span></div>
+                            </div>
+                            <div className="otherInfo d-flex row">
                             <div className="col">
-                            <span className="title">Closed :</span> <span className="value">{this.state.opportunityClosed}</span>
+                            < img src={'/arrow.svg'} alt="fireSpot" className = "img-responsive float-left "/>
+                            <div>
+                            <span className="title">CLOSED :</span> <span className="value">{this.state.opportunityClosed}</span>
+                            
+                            </div>
                             </div>
                           </div>
-                          <div className="c-portlet-changesInValue value__up"><span className="">{this.state.oppConverted}%</span>&nbsp;&nbsp;of leads converted to opportunities</div>
+                         
                         </div>
                     </div>
                 </div>
                 <div className="card c-portlet c-portlet--height-fluid-half c-portlet--height-fluid-half d-flex align-items-start flex-column">
                 <div className="mb-auto">
                       <p className="c-portlet-title">Leads</p> </div>
+                      <div className="c-portlet-changesInValue value__up">
+                         <span className="">{this.state.percentLeads} %</span>&nbsp;&nbsp; of increase from last month
+                      </div>
                         <div>
                       <div className="c-portlet-value">
                       {this.state.leads}
                       </div>
+                      <div className="progress">
+                                <div className="progress-bar progress-bar-danger"
+                                 role="progressbar" aria-valuenow="60"
+                                  aria-valuemin="0" aria-valuemax="100" 
+                                  width="100%">60% Complete
+                                 </div>
+                              </div>
 
-                      <div className="c-portlet-changesInValue value__up">
-                         <span className="">{this.state.percentLeads} %</span>&nbsp;&nbsp; of increase from last month
-                      </div>
+                     
                   </div>
                 </div>
               </div>

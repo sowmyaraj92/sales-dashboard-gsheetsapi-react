@@ -5,15 +5,20 @@ html{
     font-size: 62.5%;
 }
 body {
-    background: #19222a;  /* fallback for old browsers */
+    /* background: #19222a;  */
+     background-color:#252033;
+
     font-family: 'Poppins', sans-serif;
     font-size: 1.6rem; 
     padding: 110px 0 0px;
 }
-
+.rectangle {
+        height: 65px;
+            width: 65px;
+            	background-color: #E81A59;}
 .navbar{
    padding: 1.7rem 2rem;
-   background-color:#141c21;
+   background-color:#252037;
    box-shadow :0px 0px 40px 0px rgba(82, 63, 105, 0.1);
 }
 
@@ -39,7 +44,9 @@ body {
 
 .card{
     box-shadow: 0px 0px 13px 0px rgba(82, 63, 105, 0.05);
-    background-color: #202731;
+    /* background-color: #202731; */
+   
+    background-color: #24243E;
     border:0;
     border-radius: 4px;
     margin-bottom: 20px;
