@@ -1,31 +1,44 @@
 
-@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600');
 
 html{
     font-size: 62.5%;
 }
 body {
     /* background: #19222a;  */
-     background-color:#252033;
-
-    font-family: 'Poppins', sans-serif;
+     background-color:#212039;
+     color: #707479;
+     font-family: 'Open Sans', sans-serif;
     font-size: 1.6rem; 
     padding: 110px 0 0px;
 }
-.rectangle {
-        height: 65px;
-            width: 65px;
-            	background-color: #E81A59;}
+@media (min-width: 1600px){
+    .container {
+        max-width: 1440px;
+    }
+}
 .navbar{
-   padding: 1.7rem 2rem;
-   background-color:#252037;
-   box-shadow :0px 0px 40px 0px rgba(82, 63, 105, 0.1);
+   font-family: Arial, Helvetica, sans-serif !important;
+   padding: 0 4rem 0 0;
+   background-color:#24243e;
 }
 
+.logo {
+    height: 65px;
+    background-color: #E81A59;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 20px 25px;
+    line-height: 1.2;
+    color: #fff;
+    margin-right: 16px;
+    display: inline-block;
+}
 
 .navbar-brand{
     color: #fff;
-    font-size: 2rem;
+    font-size: 1.8rem;
+    padding: 0;
 }
 .nav-link{
     color: #ffffff95;
@@ -36,10 +49,88 @@ body {
 .nav-link:hover{
     color: #ffffff;
 }
+.name{
+    color: #929AAE;
+    font-size: 14px;
+}
+.time-selector .dropdown .btn{	
+    font-size: 12px;
+    border-radius: 18px;
+    padding: 0.7rem 1.8rem;
+    color: #81809C;
+    background-color: transparent;
+    border: 1.5px solid #464558;
+    margin-left: 10px;
+}
+.time-selector .dropdown .btn:focus{
+   box-shadow:none;
+}
+.time-selector .dropdown .btn::after{
+   vertical-align:middle;
+   font-size: 1rem;
+}
+.time-selector .active-item .btn{
+    background-color: #E81A59;
+    color:#fff;
+    border: 1.5px solid #E81A59;
+}
+.oval {
+	height: 35px;
+	width: 35px;
+    background-color: rgba(232,26,89,0.08);
+    border-radius: 50%;
+    margin-right: 1rem;
+}
+.pl-24{
+    padding-left: 24px;
+}
+.pr-24{
+    padding-right: 24px;
+}
+.pt-24{
+    padding-top: 24px;
+}
+.otherInfo .oval{
+    background-color: #2B2A46;
+}
+.rectangle {
+	height: 28px;
+    width: 28px;
+    min-width: 28px;
+	border-radius: 2px;
+    background-color: #2B2A46;
+    margin-right:10px;
+    
+}
+.full-width{
+    width:100%;
+}
+.mb-7{
+    margin-top: 3.8rem;
+}
+.kpi-block .h5{
+    opacity: 0.8;
+    color: #8091AB;
+    font-size: 12px;
+    letter-spacing: 0.9px;
+}
+.custom-progress{
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+    height:0.
+}
 .btn-primary{
     background: #48bef7;
     border-color: #29B6F6;
     color:#fff;
+}
+.content-title{
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 600;
+    opacity: 0.8;
 }
 
 .card{
@@ -56,6 +147,12 @@ body {
 .dropdown-menu{
     font-size: 1.3rem;
 }
+.deals{
+    background-color: #33324B2e;
+    box-shadow: 0 8px 10px 0 rgba(33,32,53,0.68);
+    padding: 24px;
+}
+
 .c-portlet{
     display: -webkit-box;
    display: -ms-flexbox;
@@ -76,7 +173,7 @@ body {
     letter-spacing: 0.1rem;
 }
 .c-portlet .otherInfo .value{
-    color: #fff;
+    color: #ED9B02;
     font-size: 1.6rem;
     letter-spacing: 0.1rem;
 }
@@ -94,14 +191,19 @@ body {
     height: calc(100% - 20px);
 }
 .c-portlet-title{
-    color: #9898a7;
-    text-transform: uppercase;
-    font-size: 1.6rem;
-    letter-spacing: 0.05rem;
+
+    color: #8091AB;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 0.5rem;
 }
 .c-portlet-value{
     font-size: 3.5rem;
-    color: #ffffff;
+    color: #D3DFF2;
+    margin-top: 1.5rem;
+}
+.poa{
+    position: absolute;
 }
 .c-portlet-changesInValue{
     font-size: 1.4rem;
@@ -109,6 +211,27 @@ body {
     margin-top: 0.3rem;
     letter-spacing: 0.1rem;
 }
+
+.has-down-val {
+    color: #E84C85;
+    position: relative;
+    font-size: 1.2rem;
+}
+
+.has-down-val::before {
+    content: ""attr(data-down)" ";
+}
+
+.has-up-val {
+    color: #48B884;
+    position: relative;
+    font-size: 1.2rem;
+}
+
+.has-up-val::before {
+    content: ""attr(data-up)" ";
+}
+
 .c-portlet-changesInValue.value__up span{
     color:#41C742;
     font-size: 1.6rem;
@@ -119,6 +242,7 @@ body {
 .deals{
     margin-top: 4rem;
 }
+
 /* Media queries */
 
 @media (min-width: 576px){
