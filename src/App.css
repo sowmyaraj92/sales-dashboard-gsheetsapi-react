@@ -99,7 +99,7 @@ body {
     min-width: 28px;
 	border-radius: 2px;
     background-color: #2B2A46;
-    margin-right:10px;
+    margin-right:16px;
     
 }
 .full-width{
@@ -218,19 +218,47 @@ body {
     font-size: 1.2rem;
 }
 
-.has-down-val::before {
-    content: ""attr(data-down)" ";
-}
 
 .has-up-val {
+    position: relative;
     color: #48B884;
     position: relative;
     font-size: 1.2rem;
+    /* background-image :url('/path.svg');
+    background-repeat: no-repeat; */
 }
-
-.has-up-val::before {
-    content: ""attr(data-up)" ";
+.has-up-val::before{
+    content: " ";
+   background-image :url('/path.svg');
+    background-repeat: no-repeat; 
+    position: absolute;
+    left: -35px;
+    top: 4px;
+    width: 20px;
+    height: 20px;
 }
+.has-down-val::before{
+    content: "";
+    background-image :url('/redarrow.svg');
+    background-repeat: no-repeat;
+    position: absolute;
+    left: -35px;
+    top: 4px;
+    width: 20px;
+    height: 20px;
+ }
+ .has-down-val::after{
+    content: ""attr(data-down)"";
+    position: absolute;
+    left:-8px;
+    top:0;
+ }
+ .has-up-val::after{
+    content: ""attr(data-up)"";
+    position: absolute;
+    left:-10px;
+    top:0;
+ }
 
 .c-portlet-changesInValue.value__up span{
     color:#41C742;

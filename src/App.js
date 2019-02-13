@@ -59,9 +59,7 @@ function formatNum(num) {
 class App extends React.Component{
  
   //Constructor
-  constructor(){
-    // let value = 'Year'
-    // let quartervalue ='Quarter'
+  constructor(){ 
   super();
 
     this.url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=SalesDataSomi&majorDimension=ROWS&key=${config.apiKey}`;
@@ -69,8 +67,8 @@ class App extends React.Component{
   // Initialise values 
     this.state = {
       items: [],
-      value:'Year',
-      quartervalue :'Quarter',
+      value : 'Year',
+      quarterValue :'Quarter',
       selectedValue: null,
       mapData : null,
       mslineData :null,
@@ -152,17 +150,16 @@ class App extends React.Component{
             pipelineValue+=parseInt(arr[i].value_Pipeline_month);
     
             chartDataArr.push(arr[i]);
-
               if(targetRevenueFlag===false) {
                   targetRevenueVal=parseInt(arr[i].revenueTarget_Annual); 
-                 // console.log("value",targetRevenueVal);
                 targetRevenueFlag = true;
               }
               
           }
-          else if(monthStr.includes((parseInt(arg)-1))) {
+          else if(monthStr.includes((parseInt(arg)+1))) {
             prevleadsVal += parseInt(arr[i].leads_month); 
           }
+          
     }
 
     //Quarterly Data
@@ -188,9 +185,11 @@ class App extends React.Component{
                   targetRevenueFlag = true;
               }
           }
-          else if(quarterStr.includes((parseInt(arg)-1))) {
+          else if(quarterStr.includes((parseInt(arg)+1))) {
             prevleadsVal += parseInt(arr[i].leads_month); 
+           
           }
+          
     }
       
     //Percent of pipeline converted
@@ -200,15 +199,14 @@ class App extends React.Component{
     if(pipelineConvert < 0 ) {
       pipelineElem.innerHTML = Math.abs(pipelineConvert) + '%';
       pipelineElem.classList.add('has-down-val');
-     // pipelineElem.add('./redarrow.svg');
+    
     } 
     else if(pipelineConvert >= 0 ) {
       pipelineElem.innerHTML = Math.abs(pipelineConvert) + '%';
       pipelineElem.classList.add('has-up-val');
-      //pipelineElem.add('./path.svg');
     }
 
-    document.getElementById("pipeline-converted").innerHTML = pipelineConvert.toFixed(2);
+    document.getElementById("pipeline-converted").innerHTML = (pipelineConvert.toFixed(2))+'%';
    
 
     //Percent of leads converted to opportunities
@@ -216,16 +214,16 @@ class App extends React.Component{
     const oppPercent =(oppConvert).toFixed(2);
 
     if(oppConvert < 0 ) {
-      leadElem.innerHTML = Math.abs(oppConvert) + '%';
+      leadElem.innerHTML = Math.abs(oppConvert)+'%';
       leadElem.classList.add('has-down-val');
       //leadElem.add('./redarrow.svg');
     } 
     else if(oppConvert >= 0 ) {
-      leadElem.innerHTML = Math.abs(oppConvert) + '%';
+      leadElem.innerHTML = Math.abs(oppConvert)+'%';
       leadElem.classList.add('has-up-val');
       //leadElem.add('./path.svg');
     }
-    document.getElementById("leads-converted").innerHTML = oppConvert.toFixed(2);
+    document.getElementById("leads-converted").innerHTML = (oppConvert.toFixed(2))+'%';
 
     //Percent of targets achieved
     const target = (oppClosedVal/targetRevenueVal)*100;
@@ -237,12 +235,12 @@ class App extends React.Component{
      // targetElem.add('./redarrow.svg');
     } 
     else if(target >= 0 ) {
-    targetElem.innerHTML = Math.abs(target) + '%';
+    targetElem.innerHTML = Math.abs(target) +'%';
     targetElem.classList.add('has-up-val');
     //targetElem.add('./path.svg');
     }
 
-    document.getElementById("kpi-target").innerHTML = target.toFixed(2);
+    document.getElementById("kpi-target").innerHTML = (target.toFixed(2))+'%';
 
    //Percent of opportunities in pipeline
     const oppPipelineConvert = (pipelineValue/oppSourcedVal)*100;
@@ -261,25 +259,24 @@ class App extends React.Component{
       //opportunityElem.add('./path.svg');
     }
 
-    document.getElementById("opportunity-pipeline").innerHTML = oppPipelineConvert.toFixed(2);
-  
-   
+    document.getElementById("opportunity-pipeline").innerHTML = (oppPipelineConvert.toFixed(2))+'%';
     //Lead increase percentage
+      let Leads;
+      if(prevleadsVal === 0)
+      Leads = 100;
+      else 
+      Leads = ((leadsVal-prevleadsVal)/prevleadsVal)*100;
+      const centLeads = (Leads).toFixed(2);
     
-    const Leads = ((leadsVal-prevleadsVal)/prevleadsVal)*100;
-    const centLeads = (Leads).toFixed(2);
-
-    if(Leads < 0 ) {
+    if(Leads < 100 ) {
       leadDifferenceElem.innerHTML = Math.abs(Leads);
       leadDifferenceElem.classList.add('has-down-val');
-      //leadDifferenceElem.img.add('./path.svg');
     } 
-    else if(Leads >= 0 ) {
+    else if(Leads >= 100 ) {
       leadDifferenceElem.innerHTML = Math.abs(Leads);
       leadDifferenceElem.classList.add('has-up-val');
-      //leadDifferenceElem.img.add('./path.svg');
     }
-    document.getElementById("lead-difference").innerHTML = Leads.toFixed(2);
+    document.getElementById("lead-difference").innerHTML = (Leads.toFixed(2))+'%';
     // Array length
     let chartDataArrLen = chartDataArr.length;
     
@@ -320,6 +317,9 @@ class App extends React.Component{
           "valueFontSize": "10",
           "numDivlines": "2",
           "bgAlpha": "0",
+          "labelFontColor":"#81809C",
+          "valueFontColor":"#D3DFF2",
+          "toolTipBgColor":"#ffff",
         },
         "categories": [
           {
@@ -344,32 +344,21 @@ class App extends React.Component{
     //World Map
     let mapChart_xAxis = []; 
     let mapChart_yAxis = []; 
-    let mapChart_zAxis =[];
-    let mapChart_DealsAxis =[];
-    let mapChart_QuarterAxis =[];
-
 
     for (let i=0; i<chartDataArrLen; i++) {
 
-      mapChart_xAxis.push({id: chartDataArr[i].region_Quarter});
+      mapChart_xAxis.push({id: chartDataArr[i].Region});
       mapChart_yAxis.push({value: chartDataArr[i].count_Deals});  
-      mapChart_zAxis.push({id: chartDataArr[i].Region});
-      mapChart_QuarterAxis.push({id: chartDataArr[i].Quarter});
-      mapChart_DealsAxis.push({id: chartDataArr[i].count_Deals_Quarter});
- 
- 
+  
     }
-    console.log(mapChart_xAxis.label);
-    console.log(mapChart_yAxis.value);
      //World Map
-    const WorldDataArr = [];   
+    const WorldDataArr = []; 
+    for (let k=0; k<chartDataArrLen; k++) {
+      WorldDataArr.push({ "value": chartDataArr[k].Quarter1});
   
-    for (let k=1; k<=6; k++) {
-     // WorldDataArr.push({"id": mapChart_xAxis[k].label, "value": mapChart_yAxis[k].value});
-     // QuarterDataArr.push({"id":mapChart_QuarterAxis[k].label,"value":mapChart_DealsAxis[k].value})
     }
-
-  
+  //  console.log(this.state.quarterValue);
+  //   console.log("world",WorldDataArr);
   const chartConfigs2 = {
       type : "world",
        width : '100%',
@@ -379,56 +368,53 @@ class App extends React.Component{
         "chart": {
           "caption": "Sales Statistics",
           "captionFontColor": "#D3DFF2",
-          "captionAlignment":"left",
-        
-          "numbersuffix": "%",
+          "captionAlignment":"left",  
           "theme": "fusion",
           "bgAlpha": "0",
         },
         "colorrange": {
           "minvalue": "0.5",
           "code": "#E81A59",
-          "gradient": "1",
           "color": [
           {
             "displayvalue": "0-50",
             "maxvalue": "50",
-            "code": "#6957DA"
+            "code": "#538782"
           },
           {
             "maxvalue": "200",
             "displayvalue": "51-200",
-            "code": "#48BD86"
+            "code": "#A35973"
           },
           {
             "maxvalue": "1000",
             "displayvalue": "200+",
-            "code": "#E81A59"
+            "code": "#2F6891"
           }
         ]},
           "data": [
             { "id": "NA",
-             "value":WorldDataArr[0], 
+             "value":WorldDataArr[0].value, 
              "showLabel": "1" },
 
             { "id": "SA",
-             "value": WorldDataArr, 
+             "value": WorldDataArr[1].value, 
              "showLabel": "1" },
 
             { "id": "AS",
-             "value": WorldDataArr,
+             "value": WorldDataArr[2].value,
              "showLabel": "1" },
 
             { "id": "EU",
-             "value": WorldDataArr,
+             "value": WorldDataArr[3].value,
              "showLabel": "1" },
 
             { "id": "AF", 
-            "value": WorldDataArr,
+            "value": WorldDataArr[4].value,
              "showLabel": "1" },
 
             { "id": "AU",
-             "value":WorldDataArr,
+             "value":WorldDataArr[5].value,
               "showLabel": "1" }
         ],
         
@@ -467,7 +453,6 @@ class App extends React.Component{
         
           "xAxisName": "Month ",
           "yAxisName": "Deals won",
-          "showvalues": "0",
          "slantlabels": "1",
           "numberPrefix": "$",
           "divLineAlpha": "40",
@@ -475,11 +460,12 @@ class App extends React.Component{
           "animation": "1",
           "legendborderalpha": "20",
           "drawCrossLine": "1",
-          "crossLineColor": "#0d0d0d",
           "crossLineAlpha": "100",
           "tooltipGrayOutColor": "#80bfff",
           "theme": "fusion",
           "bgAlpha": "0",
+          "labelFontColor":"#81809C",
+          
         },   
         "categories": [
           {
@@ -496,23 +482,12 @@ class App extends React.Component{
             "seriesname": "Closed",
             "data": msChart_yAxis
           }],
-          // "trendlines": [
-          //   {
-          //       "line": [
-          //           {
-          //               "startvalue": "200",
-          //               "color": "#62B58F",
-          //               "valueOnRight": "1",
-                        
-          //           }]
-          //   }]
       }   
     }
 
     this.setState({mslineData: chartConfigs3});
   
     //Pushing values to the KPI
-
 
     this.setState({targetRevenue: formatNum(targetRevenueVal)});
     this.setState({opportunitySourcedVal: formatNum(oppSourcedVal)});
@@ -521,8 +496,6 @@ class App extends React.Component{
 
     this.setState({opportunitySourced: oppSourced});
     this.setState({opportunityClosed: oppClosed});
-
-
 
    this.setState({percentLeads:centLeads});
    this.setState({dealsPipeline:pipelineDeals});
@@ -539,7 +512,8 @@ class App extends React.Component{
 //Add a function for Year,Quarter and Month 
 
   updateDashboard = (event) => {
-    this.value = event.target.innerText;
+    this.setState({value :event.target.innerText})
+    // this.setstate.value = event.target.innerText;
     if(event.target.id === 'btn-2018'){
       this.getData('2018');
       this.filterQuarters('2018');
@@ -608,67 +582,43 @@ class App extends React.Component{
      }
      
      updateDashboardQuarter = (event) => {
-      this.quartervalue = event.target.innerText;
-      if(event.target.id === 'btn-q1') {
-    
+      this.setState({quarterValue:event.target.innerText})
+      if(event.target.id === 'btn-q1') 
         this.getData('Quarter 1');
-      }
-        else if(event.target.id === 'btn-q2'){
+
+        else if(event.target.id === 'btn-q2')
         this.getData('Quarter 2');
-      }
   
-        else if(event.target.id === 'btn-q3'){
-      
+        else if(event.target.id === 'btn-q3')
           this.getData('Quarter 3');   
-        } 
-        else if(event.target.id === 'btn-q4') {
-
-         
-          this.getData('Quarter 4');
-        }
         
-        else if(event.target.id === 'btn-q5'){
-
-          // document.getElementById('btn-q5').value =event.target.text;
+        else if(event.target.id === 'btn-q4') 
+          this.getData('Quarter 4'); 
+        
+        else if(event.target.id === 'btn-q5')
           this.getData('Quarter 5');
-        }
         
-        else if(event.target.id === 'btn-q6'){
-          // document.getElementById('btn-q6').value = event.target.text;
+        else if(event.target.id === 'btn-q6')
           this.getData('Quarter 6');
-        }
-        
-        else if(event.target.id === 'btn-q7') {
-          // document.getElementById('btn-q7').value = event.target.text;
+    
+        else if(event.target.id === 'btn-q7') 
           this.getData('Quarter 7');
-        }
-      
-        else if(event.target.id === 'btn-q8'){
-
-          // document.getElementById('btn-q8').value = event.target.text;
+        
+        else if(event.target.id === 'btn-q8')
           this.getData('Quarter 8');
-  
-        }
         
-        else if(event.target.id === 'btn-q9'){
-          // document.getElementById('btn-q9').value = event.target.text;
+        else if(event.target.id === 'btn-q9')
           this.getData('Quarter 9');
-        }
       
-        else if(event.target.id === 'btn-q10'){
-          // document.getElementById('btn-q10').value =event.target.text;
+        else if(event.target.id === 'btn-q10')
           this.getData('Quarter 10');
-        } 
 
-        else if(event.target.id === 'btn-q11'){
-        //  document.getElementById('btn-q11').value =event.target.text;
+        else if(event.target.id === 'btn-q11')
           this.getData('Quarter 11');
-        }
-        
-        else if(event.target.id === 'btn-q12'){
-          // document.getElementById('btn-q12').value =event.target.text;
+           
+        else if(event.target.id === 'btn-q12')
           this.getData('Quarter 12');  
-        } 
+
       }
        
   componentWillMount() {
@@ -684,18 +634,12 @@ class App extends React.Component{
         }
         rows.push(rowObject);
       }
-      this.setState({ items: rows}, () => this.getData('2018')); 
+      this.setState({ items: rows}, () => this.getData('2016')); 
       
-    });
-    
+    }); 
   }
 
-//   Reset() {  
-//     document.getElementById("my_select").selectedIndex = 1; 
-// }  
   render() {
-
-    //const {branding} = props;
     return (
       <div className="App">
       { /* Navigation Bar */}   
@@ -709,7 +653,7 @@ class App extends React.Component{
                     <div className="profile">
                       <img alt="" className="mr-3 rounded-circle border" width="42"
                       src="./Image-Tim.png" />
-                      <span className="name">Hey,Tim </span>  
+                      <span className="name d-none d-sm-inline-flex">Hey, Tim </span>  
                     </div>
                   </li>
                 </ul>
@@ -729,24 +673,22 @@ class App extends React.Component{
                       <div className="dropdown active-item">
                         <button className="btn btn-secondary dropdown-toggle" 
                         type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {this.value}
+                        {this.state.value}
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <div className="dropdown-item">Choose Year</div>
-                          <div className="dropdown-item" id="btn-2018" onClick ={this.updateDashboard} selectedValue={2018}>2018</div>
-                          <div className="dropdown-item" id="btn-2017" onClick ={this.updateDashboard} >2017</div>
-                          <div className="dropdown-item" id="btn-2016"onClick ={this.updateDashboard} >2016</div>
+                          <div className="dropdown-item" value ="2018" id="btn-2018" onClick ={this.updateDashboard} >2018</div>
+                          <div className="dropdown-item" value ="2017" id="btn-2017" onClick ={this.updateDashboard} >2017</div>
+                          <div className="dropdown-item" value ="2016" id="btn-2016"onClick ={this.updateDashboard} >2016</div>
                         </div>
                       </div>
                     </li>
 
-                    {/* <input type="button" id="btnReset" value="Reset" onclick="Reset();" /> */}
             
                   <li className="list-inline-item">
                     <div className="dropdown">
                     <button className="btn btn-secondary dropdown-toggle" 
                     type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                   {this.quartervalue}
+                   {this.state.quarterValue}
                     </button>
                   <div className="dropdown-menu" for="navbarDropdown" aria-labelledby="navbarDropdown">
                     <div id ="btn-q1" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 1</div>
@@ -781,10 +723,9 @@ class App extends React.Component{
                     </div>
                       <div className="d-flex align-items-center mb-7 kpi-block">
                         <span className="rectangle d-flex justify-content-center ">
-                         <img src={'/Path.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="10"/>
                         </span>
                           <div id ="kpi-target" data-up="+" data-down="-"></div>
-                            <span className ="h5 mb-0">&nbsp;&nbsp; of target achieved</span>
+                            <span className ="h5 mb-0">&nbsp; of target achieved</span>
                       </div>  
 
                           <div className="kpi-block">
@@ -806,10 +747,9 @@ class App extends React.Component{
                 
                         <div className="d-flex align-items-center mb-7 kpi-block">
                         <span className="rectangle d-flex justify-content-center ">
-                         <img src={'/Path.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="10"/>
-                        </span>
+                          </span>
                         <div id ="pipeline-converted" data-up="+" data-down="-"></div>
-                        <span className ="h5 mb-0">&nbsp;&nbsp; of pipeline converted</span>
+                        <span className ="h5 mb-0">&nbsp; of pipeline converted</span>
                         </div>  
 
                           <div className="kpi-block">
@@ -853,12 +793,11 @@ class App extends React.Component{
                         <div className="d-flex mb-auto flex-column align-items-top  kpi-block pl-24 pr-24">
                       <div className="d-flex">
                       <span className="rectangle d-flex justify-content-center ">
-                         <img src={'/Path.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="10"/>
                         </span>
 
                         <div>
                           <span id ="opportunity-pipeline" data-up="+" data-down="-"></span>
-                          <span className ="h5 mb-0">&nbsp;&nbsp; of opportunities in pipeline</span>
+                          <span className ="h5 mb-0">&nbsp; of opportunities in pipeline</span>
                         </div>
                       </div>
 
@@ -904,7 +843,6 @@ class App extends React.Component{
                   <div className="d-flex mb-auto flex-column align-items-top  kpi-block pl-24 pr-24">
                       <div className="d-flex">
                       <span className="rectangle d-flex justify-content-center ">
-                         <img src={'/Path.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="10"/>
                         </span>
 
                         <div>
@@ -932,8 +870,6 @@ class App extends React.Component{
 
                         </div>
                    
-                  
-                         
 
                           <div className="full-width d-flex align-items-center">
                       
@@ -978,7 +914,6 @@ class App extends React.Component{
                     <div className="d-flex mb-auto flex-column align-items-top kpi-block">
                       <div className="d-flex">
                       <span className="rectangle d-flex justify-content-center ">
-                         <img src={'/Path.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="10"/>
                         </span>
 
                         <div>
@@ -989,7 +924,8 @@ class App extends React.Component{
 
                         <div className="kpi-block">
                               <div className="c-portlet-value">
-                              <span className="h1"></span> {this.state.leads}
+                              <span className="h1"></span>{this.state.leads}
+                              
                           </div>
                           <span className="h5 poa">so far</span>    
                           </div>
