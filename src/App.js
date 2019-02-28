@@ -30,32 +30,6 @@ function formatNum(num) {
   }
   return (num / si[i].value).toFixed(2).replace(rx, "$1") + si[i].symbol;
 } 
-// function dataParser(data) {
-//   // first tuple is header
-//   const headers = data[0];
-//   const idxMap = {};
-//   const dataMap = {};
-//   // initi empty array for each column
-//   headers.forEach((header, idx) => {
-//     idxMap[idx] = header;
-//     dataMap[header] = [];
-//   });
-//   for (let i = 1; i < data.length; i += 1) {
-//     const tuple = data[i];
-//     tuple.forEach((val, i) => {
-//       const header = idxMap[i];
-//       dataMap[header].push(val);
-//     });
-//   }
-//   /*
-//     {
-//       "Name": ['Top', 'jfjyf'],
-//       "Month": ['octobr], 
-//     }
-//   */ 
-//   return dataMap;
- 
-// }
 class App extends React.Component{
  
   //Constructor
@@ -63,16 +37,18 @@ class App extends React.Component{
   super();
 
     this.url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=SalesDataSomi&majorDimension=ROWS&key=${config.apiKey}`;
+   //this.mapurl = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=MapPlot&majorDimension=ROWS&key=${config.apiKey}`;
 
   // Initialise values 
     this.state = {
       items: [],
       value : 'Year',
       quarterValue :'Quarter',
+      quarterMap :'-',
       selectedValue: null,
       mapData : null,
       mslineData :null,
-      bubbleData: null,
+      stackData: null,
       showMenu: false,
       targetRevenue: '-',
       leads :'-',
@@ -89,7 +65,6 @@ class App extends React.Component{
       dealsPipeline:'-',
       valuesPipeline:'-',
       oppPipelineConverted:'-',
-
       }
   }
   getData = (arg) => {
@@ -99,6 +74,7 @@ class App extends React.Component{
     let chartDataArr = [];
     let targetRevenueVal =0;
     let leadsVal = 0;
+  
     let targetRevenueFlag =false;
     let oppSourced =0;
     let oppSourcedVal =0;
@@ -139,6 +115,7 @@ class App extends React.Component{
       let monthStr = (arr[i])['year']; 
           if (monthStr.includes(arg)) {
             leadsVal += parseInt(arr[i].leads_month);
+            prevleadsVal +=parseInt(arr[i].prev_leads_year);
            
             oppSourced += parseInt(arr[i].opp_Sourced_month);
             oppSourcedVal += parseInt(arr[i].value_OppSourced_month);
@@ -156,10 +133,6 @@ class App extends React.Component{
               }
               
           }
-          else if(monthStr.includes((parseInt(arg)+1))) {
-            prevleadsVal += parseInt(arr[i].leads_month); 
-          }
-          
     }
 
     //Quarterly Data
@@ -167,17 +140,16 @@ class App extends React.Component{
       let quarterStr = (arr[i])['quarter']; 
           if (quarterStr.includes(arg)) {
             leadsVal += parseInt(arr[i].leads_month);
+            prevleadsVal +=parseInt(arr[i].prev_leads_quarter); 
+
             oppSourced += parseInt(arr[i].opp_Sourced_month);
-          
-           console.log(oppSourced);
             oppSourcedVal += parseInt(arr[i].value_OppSourced_month);
 
             oppClosed += parseInt(arr[i].opp_Closed_month);
             oppClosedVal += parseInt(arr[i].value_OppClosed_month);
-
             pipelineDeals +=parseInt(arr[i].deals_Pipeline_month);
             pipelineValue+=parseInt(arr[i].value_Pipeline_month);
-    
+            
             chartDataArr.push(arr[i]);
 
               if(targetRevenueFlag===false) {
@@ -185,11 +157,6 @@ class App extends React.Component{
                   targetRevenueFlag = true;
               }
           }
-          else if(quarterStr.includes((parseInt(arg)+1))) {
-            prevleadsVal += parseInt(arr[i].leads_month); 
-           
-          }
-          
     }
       
     //Percent of pipeline converted
@@ -216,12 +183,10 @@ class App extends React.Component{
     if(oppConvert < 0 ) {
       leadElem.innerHTML = Math.abs(oppConvert)+'%';
       leadElem.classList.add('has-down-val');
-      //leadElem.add('./redarrow.svg');
     } 
     else if(oppConvert >= 0 ) {
       leadElem.innerHTML = Math.abs(oppConvert)+'%';
       leadElem.classList.add('has-up-val');
-      //leadElem.add('./path.svg');
     }
     document.getElementById("leads-converted").innerHTML = (oppConvert.toFixed(2))+'%';
 
@@ -250,29 +215,32 @@ class App extends React.Component{
     if(oppPipelineConvert < 100 ) {
       opportunityElem.innerHTML = Math.abs(oppPipelineConvert);
       opportunityElem.classList.add('has-down-val');
-     // opportunityElem.add('/redarrow.svg')
       
     } 
     else if(oppPipelineConvert >= 100 ) {
       opportunityElem.innerHTML = Math.abs(oppPipelineConvert);
       opportunityElem.classList.add('has-up-val');
-      //opportunityElem.add('./path.svg');
     }
 
     document.getElementById("opportunity-pipeline").innerHTML = (oppPipelineConvert.toFixed(2))+'%';
     //Lead increase percentage
+      let Leads1;
       let Leads;
-      if(prevleadsVal === 0)
+      let centLeads;
+      if((prevleadsVal === 0))
       Leads = 100;
-      else 
-      Leads = ((leadsVal-prevleadsVal)/prevleadsVal)*100;
-      const centLeads = (Leads).toFixed(2);
     
-    if(Leads < 100 ) {
+      else 
+      {
+        Leads1 =(leadsVal-prevleadsVal);
+        Leads= Math.abs((Leads1/prevleadsVal)*100);
+      }       
+    
+    if(prevleadsVal>leadsVal ) {
       leadDifferenceElem.innerHTML = Math.abs(Leads);
       leadDifferenceElem.classList.add('has-down-val');
     } 
-    else if(Leads >= 100 ) {
+    else if(prevleadsVal<leadsVal ) {
       leadDifferenceElem.innerHTML = Math.abs(Leads);
       leadDifferenceElem.classList.add('has-up-val');
     }
@@ -280,16 +248,16 @@ class App extends React.Component{
     // Array length
     let chartDataArrLen = chartDataArr.length;
     
-    //Bubble chart
-    let bubbleChart_xAxis =[];
-    let bubbleChart_yAxis =[];
-    let bubbleChart_zAxis =[];
+    //stack chart
+    let stackChart_xAxis =[];
+    let stackChart_yAxis =[];
+    let stackChart_zAxis =[];
 
     for (let i=0; i<chartDataArrLen; i++) {
 
-      bubbleChart_xAxis.push({label: chartDataArr[i].month}); 
-      bubbleChart_yAxis.push({value: chartDataArr[i].value_OppClosed_month});
-      bubbleChart_zAxis.push({value:chartDataArr[i].value_Pipeline_month});
+      stackChart_xAxis.push({label: chartDataArr[i].month}); 
+      stackChart_yAxis.push({value: chartDataArr[i].value_OppClosed_month});
+      stackChart_zAxis.push({value:chartDataArr[i].value_Pipeline_month});
     }
 
     const chartConfigs1 = {
@@ -323,42 +291,55 @@ class App extends React.Component{
         },
         "categories": [
           {
-            "category": bubbleChart_xAxis
+            "category": stackChart_xAxis
           }
         ],
         "dataset": [
           { 
           "seriesname": "Pipeline",
           
-            "data": bubbleChart_zAxis 
+            "data": stackChart_zAxis 
         },
             { 
               "seriesname": "Closed",
-              "data": bubbleChart_yAxis
+              "data": stackChart_yAxis
           }]
         }
       };
 
-    this.setState({bubbleData: chartConfigs1});
-
-    //World Map
+    this.setState({stackData: chartConfigs1});    
+     //World Map
     let mapChart_xAxis = []; 
     let mapChart_yAxis = []; 
-
-    for (let i=0; i<chartDataArrLen; i++) {
-
-      mapChart_xAxis.push({id: chartDataArr[i].Region});
-      mapChart_yAxis.push({value: chartDataArr[i].count_Deals});  
   
+    for (let i=0; i<chartDataArrLen; i++) {   
+            mapChart_xAxis.push({id: chartDataArr[i].Region});
+            mapChart_yAxis.push({value: chartDataArr[i].count_Deals}); 
+           
     }
-     //World Map
-    const WorldDataArr = []; 
-    for (let k=0; k<chartDataArrLen; k++) {
-      WorldDataArr.push({ "value": chartDataArr[k].Quarter1});
+         //World Map       
+       const WorldDataArr = []; 
+       if(this.state.value = '2016'){
+          for(let i=0;i<6;i++){
+            if((this.state.quarterValue ='Quarter1')||(this.state.quarterValue ='Quarter2')
+            (this.state.quarterValue ='Quarter3')||(this.state.quarterValue ='Quarter4'))
+        WorldDataArr.push({"value": chartDataArr[i].count_Deals});
+        console.log("world",WorldDataArr);
+        }
+    }
+    else if(this.state.value = '2017'){
+      for(let i=0;i<6;i++){
+        WorldDataArr.push({"value": chartDataArr[i].count_Deals});
+        console.log("world",WorldDataArr);
+        }
+    }
+    else if (this.state.value = '2018'){
+      for(let i=0;i<6;i++){
+        WorldDataArr.push({"value": chartDataArr[i].count_Deals});
+        console.log("world",WorldDataArr);
+        }
+    }
   
-    }
-  //  console.log(this.state.quarterValue);
-  //   console.log("world",WorldDataArr);
   const chartConfigs2 = {
       type : "world",
        width : '100%',
@@ -370,62 +351,86 @@ class App extends React.Component{
           "captionFontColor": "#D3DFF2",
           "captionAlignment":"left",  
           "theme": "fusion",
+          "entityfillhovercolor": "#E3F2FD",
+          "labelFontColor":"#81809C",
           "bgAlpha": "0",
         },
         "colorrange": {
-          "minvalue": "0.5",
-          "code": "#E81A59",
+          "minvalue": "10",
+          "gradient":"0",
+          "code": "#6957da",
           "color": [
-          {
-            "displayvalue": "0-50",
-            "maxvalue": "50",
-            "code": "#538782"
-          },
-          {
-            "maxvalue": "200",
-            "displayvalue": "51-200",
-            "code": "#A35973"
-          },
-          {
-            "maxvalue": "1000",
-            "displayvalue": "200+",
-            "code": "#2F6891"
-          }
+            {
+              "minvalue": "20",
+              "maxvalue": "150",
+              "code": "#b4abec",
+              "label": "Low",
+            },
+            {
+              "minvalue": "151",
+              "maxvalue": "300",
+              "code": "#9b8fe6",
+              "label": "Medium",
+            },
+            {
+              "minvalue": "301",
+              "maxvalue": "450",
+              "code": "#8273e0",
+              "label": "High",
+          
+            },
+            {
+              "minvalue": "451",
+              "maxvalue": "600",
+              "code": "#6957da",
+              "label": "Very High"
+            },
+            {
+              "minvalue": "601",
+              "maxvalue": "750",
+              "code": "#503bd4",
+              "label": "Highest"
+            }
         ]},
           "data": [
             { "id": "NA",
+            "fontcolor": "#00000",
              "value":WorldDataArr[0].value, 
              "showLabel": "1" },
 
             { "id": "SA",
+            "fontcolor": "#00000",
              "value": WorldDataArr[1].value, 
              "showLabel": "1" },
 
             { "id": "AS",
-             "value": WorldDataArr[2].value,
+            "fontcolor": "#00000",
+            "value": WorldDataArr[2].value,
              "showLabel": "1" },
 
             { "id": "EU",
+            "fontcolor": "#00000",
              "value": WorldDataArr[3].value,
              "showLabel": "1" },
 
             { "id": "AF", 
+            "fontcolor": "#00000",
             "value": WorldDataArr[4].value,
              "showLabel": "1" },
 
             { "id": "AU",
-             "value":WorldDataArr[5].value,
+            "fontcolor": "#00000",
+           "value":WorldDataArr[5].value,
               "showLabel": "1" }
         ],
         
       }
 
   };
-
+    
   this.setState({mapData: chartConfigs2});
 
     //Multi-series chart
-
     let msChart_yAxis = [];
     let msChart_xAxis = []; 
     let msChart_zAxis =[];
@@ -502,18 +507,16 @@ class App extends React.Component{
    this.setState({valuesPipeline:pipelineValue});
    this.setState({oppPipelineConverted:oppPipelinePercent});  
 
-   this.setState({pipelineConverted:pipelinePercent });
+   this.setState({pipelineConverted:pipelinePercent});
    this.setState({oppConverted:oppPercent });
    this.setState({targetAchieved:targetPercent});
 
-   //this.setState({selectedValue: selectedValue});
    
   }
 //Add a function for Year,Quarter and Month 
 
   updateDashboard = (event) => {
     this.setState({value :event.target.innerText})
-    // this.setstate.value = event.target.innerText;
     if(event.target.id === 'btn-2018'){
       this.getData('2018');
       this.filterQuarters('2018');
@@ -583,41 +586,41 @@ class App extends React.Component{
      
      updateDashboardQuarter = (event) => {
       this.setState({quarterValue:event.target.innerText})
-      if(event.target.id === 'btn-q1') 
-        this.getData('Quarter 1');
+      if(event.target.id === 'btn-q1')
+        this.getData('Quarter1');
 
         else if(event.target.id === 'btn-q2')
-        this.getData('Quarter 2');
-  
+          this.getData('Quarter2');
+        
         else if(event.target.id === 'btn-q3')
-          this.getData('Quarter 3');   
+          this.getData('Quarter3');   
         
         else if(event.target.id === 'btn-q4') 
-          this.getData('Quarter 4'); 
+          this.getData('Quarter4'); 
         
         else if(event.target.id === 'btn-q5')
-          this.getData('Quarter 5');
+          this.getData('Quarter5');
         
         else if(event.target.id === 'btn-q6')
-          this.getData('Quarter 6');
+          this.getData('Quarter6');
     
         else if(event.target.id === 'btn-q7') 
-          this.getData('Quarter 7');
+          this.getData('Quarter7');
         
         else if(event.target.id === 'btn-q8')
-          this.getData('Quarter 8');
+          this.getData('Quarter8');
         
         else if(event.target.id === 'btn-q9')
-          this.getData('Quarter 9');
+          this.getData('Quarter9');
       
         else if(event.target.id === 'btn-q10')
-          this.getData('Quarter 10');
+          this.getData('QuarterTen');
 
         else if(event.target.id === 'btn-q11')
-          this.getData('Quarter 11');
+          this.getData('QuarterEleven');
            
         else if(event.target.id === 'btn-q12')
-          this.getData('Quarter 12');  
+          this.getData('QuarterTwelve');  
 
       }
        
@@ -625,7 +628,6 @@ class App extends React.Component{
    
     fetch(this.url).then(response => response.json()).then(data => {
       let batchRowValues = data.valueRanges[0].values;
- 
       const rows = [];
       for (let i = 1; i < batchRowValues.length; i++) {
         let rowObject = {};
@@ -635,10 +637,8 @@ class App extends React.Component{
         rows.push(rowObject);
       }
       this.setState({ items: rows}, () => this.getData('2016')); 
-      
     }); 
   }
-
   render() {
     return (
       <div className="App">
@@ -764,10 +764,10 @@ class App extends React.Component{
                   </div>
                 
               
-                        {/*Bubble Chart*/ }
+                        {/*stack Chart*/ }
               <div className="col-md-6 col-xl-8 order-2 order-md-1 order-xl-1 ">
                 <div className="card c-portlet c-portlet--height-fluid">
-                <ReactFC {...this.state.bubbleData} containerBackgroundOpacity ="0"/>
+                <ReactFC {...this.state.stackData} containerBackgroundOpacity ="0"/>
                 </div>
               </div>
                         {/*Map Chart*/ }
@@ -918,7 +918,7 @@ class App extends React.Component{
 
                         <div>
                           <span id ="lead-difference" data-up="+" data-down="-"></span>
-                          <span className ="h5 mb-0">&nbsp;&nbsp; of increase from last month</span>
+                          <span className ="h5 mb-0">&nbsp;&nbsp; of difference from last year/quarter</span>
                         </div>
                       </div>
 

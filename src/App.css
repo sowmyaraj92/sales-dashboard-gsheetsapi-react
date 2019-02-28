@@ -256,7 +256,7 @@ body {
  .has-up-val::after{
     content: ""attr(data-up)"";
     position: absolute;
-    left:-10px;
+    left:-8px;
     top:0;
  }
 
