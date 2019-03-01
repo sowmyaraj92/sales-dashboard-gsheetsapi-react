@@ -5,43 +5,25 @@ import Maps from 'fusioncharts/fusioncharts.maps';
 import World from 'fusionmaps/maps/es/fusioncharts.world';
 import ReactFC from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
+import formatNum from './format-number';
 import config from './config';
 import './App.css';
 
 
-ReactFC.fcRoot(FusionCharts, Charts, Maps, World, FusionTheme);
+ReactFC.fcRoot(FusionCharts, Charts, Maps, World, FusionTheme); 
 
-function formatNum(num) {
-  let si = [
-    { value: 1, symbol: "" },
-    { value: 1e3, symbol: "k" },
-    { value: 1e6, symbol: "m" },
-    { value: 1e9, symbol: "g" },
-    { value: 1e12, symbol: "t" },
-    { value: 1e15, symbol: "p" },
-    { value: 1e18, symbol: "e" }
-  ];
-  let rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-  let i;
-  for (i = si.length - 1; i > 0; i--) {
-    if (num >= si[i].value) {
-      break;
-    }
-  }
-  return (num / si[i].value).toFixed(2).replace(rx, "$1") + si[i].symbol;
-} 
+
+const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=SalesDataSomi&majorDimension=ROWS&key=${config.apiKey}`;
+const mapurl = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=MapPlot&majorDimension=ROWS&key=${config.apiKey}`;
+
 class App extends React.Component{
- 
   //Constructor
   constructor(){ 
   super();
-
-    this.url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=SalesDataSomi&majorDimension=ROWS&key=${config.apiKey}`;
-   //this.mapurl = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=MapPlot&majorDimension=ROWS&key=${config.apiKey}`;
-
   // Initialise values 
     this.state = {
       items: [],
+      mapItems: [],
       value : 'Year',
       quarterValue :'Quarter',
       quarterMap :'-',
@@ -67,7 +49,8 @@ class App extends React.Component{
       oppPipelineConverted:'-',
       }
   }
-  getData = (arg) => {
+  
+  getData = (arg, arg2) => {
     // google sheet data
     const arr = this.state.items;
     const arrLen = arr.length;
@@ -317,118 +300,6 @@ class App extends React.Component{
             mapChart_yAxis.push({value: chartDataArr[i].count_Deals}); 
            
     }
-         //World Map       
-       const WorldDataArr = []; 
-       if(this.state.value = '2016'){
-          for(let i=0;i<6;i++){
-            if((this.state.quarterValue ='Quarter1')||(this.state.quarterValue ='Quarter2')
-            (this.state.quarterValue ='Quarter3')||(this.state.quarterValue ='Quarter4'))
-        WorldDataArr.push({"value": chartDataArr[i].count_Deals});
-        console.log("world",WorldDataArr);
-        }
-    }
-    else if(this.state.value = '2017'){
-      for(let i=0;i<6;i++){
-        WorldDataArr.push({"value": chartDataArr[i].count_Deals});
-        console.log("world",WorldDataArr);
-        }
-    }
-    else if (this.state.value = '2018'){
-      for(let i=0;i<6;i++){
-        WorldDataArr.push({"value": chartDataArr[i].count_Deals});
-        console.log("world",WorldDataArr);
-        }
-    }
-  
-  const chartConfigs2 = {
-      type : "world",
-       width : '100%',
-       height : '95%',
-       dataFormat : "JSON",
-       dataSource :{
-        "chart": {
-          "caption": "Sales Statistics",
-          "captionFontColor": "#D3DFF2",
-          "captionAlignment":"left",  
-          "theme": "fusion",
-          "entityfillhovercolor": "#E3F2FD",
-          "labelFontColor":"#81809C",
-          "bgAlpha": "0",
-        },
-        "colorrange": {
-          "minvalue": "10",
-          "gradient":"0",
-          "code": "#6957da",
-          "color": [
-            {
-              "minvalue": "20",
-              "maxvalue": "150",
-              "code": "#b4abec",
-              "label": "Low",
-            },
-            {
-              "minvalue": "151",
-              "maxvalue": "300",
-              "code": "#9b8fe6",
-              "label": "Medium",
-            },
-            {
-              "minvalue": "301",
-              "maxvalue": "450",
-              "code": "#8273e0",
-              "label": "High",
-          
-            },
-            {
-              "minvalue": "451",
-              "maxvalue": "600",
-              "code": "#6957da",
-              "label": "Very High"
-            },
-            {
-              "minvalue": "601",
-              "maxvalue": "750",
-              "code": "#503bd4",
-              "label": "Highest"
-            }
-        ]},
-          "data": [
-            { "id": "NA",
-            "fontcolor": "#00000",
-             "value":WorldDataArr[0].value, 
-             "showLabel": "1" },
-
-            { "id": "SA",
-            "fontcolor": "#00000",
-             "value": WorldDataArr[1].value, 
-             "showLabel": "1" },
-
-            { "id": "AS",
-            "fontcolor": "#00000",
-            "value": WorldDataArr[2].value,
-             "showLabel": "1" },
-
-            { "id": "EU",
-            "fontcolor": "#00000",
-             "value": WorldDataArr[3].value,
-             "showLabel": "1" },
-
-            { "id": "AF", 
-            "fontcolor": "#00000",
-            "value": WorldDataArr[4].value,
-             "showLabel": "1" },
-
-            { "id": "AU",
-            "fontcolor": "#00000",
-           "value":WorldDataArr[5].value,
-              "showLabel": "1" }
-        ],
-        
-      }
-
-  };
-    
-  this.setState({mapData: chartConfigs2});
 
     //Multi-series chart
     let msChart_yAxis = [];
@@ -490,6 +361,48 @@ class App extends React.Component{
       }   
     }
 
+
+    // ********* map config start *************
+    const mapRegions = ["NA", "AS", "AF", "AU", "EU", "SA"];
+      const yearMapDataArr = this.state.mapItems.filter(function(elem) {
+        return elem.Year === arg;
+      });
+
+      // total sum of selected year
+      let yearMapData = [];
+      for(let i=0; i<mapRegions.length; i++) {
+        let val = 0;
+        for(let j=0; j<yearMapDataArr.length; j++) {
+          if(mapRegions[i] === yearMapDataArr[j]['Region']) {
+            val += parseInt(yearMapDataArr[j]['Value']);
+          }
+        }
+        yearMapData.push({
+          id: mapRegions[i],
+          value: val
+        });
+      }
+      let quarterMapData = [];
+      for(let i=0; i<mapRegions.length; i++) {
+        let val = 0;
+        for(let j=0; j<yearMapDataArr.length; j++) {
+          if(mapRegions[i] === yearMapDataArr[j]['Region'] && yearMapDataArr[j]['Quarter'] ===  arg2 /*variable name that contains value for Quarter*/ ) {
+            val += parseInt(yearMapDataArr[j]['Value']);
+          }
+        }
+        quarterMapData.push({
+          id: mapRegions[i],
+          value: val
+        });
+      }
+
+      console.log(yearMapData);
+      console.log(quarterMapData);
+
+      
+      
+    // ********* map config end *************
+
     this.setState({mslineData: chartConfigs3});
   
     //Pushing values to the KPI
@@ -513,7 +426,6 @@ class App extends React.Component{
 
    
   }
-//Add a function for Year,Quarter and Month 
 
   updateDashboard = (event) => {
     this.setState({value :event.target.innerText})
@@ -587,7 +499,7 @@ class App extends React.Component{
      updateDashboardQuarter = (event) => {
       this.setState({quarterValue:event.target.innerText})
       if(event.target.id === 'btn-q1')
-        this.getData('Quarter1');
+        this.getData('2016', 'Quarter1');
 
         else if(event.target.id === 'btn-q2')
           this.getData('Quarter2');
@@ -624,9 +536,9 @@ class App extends React.Component{
 
       }
        
-  componentWillMount() {
+  componentDidMount() {
    
-    fetch(this.url).then(response => response.json()).then(data => {
+    fetch(url).then(response => response.json()).then(data => {
       let batchRowValues = data.valueRanges[0].values;
       const rows = [];
       for (let i = 1; i < batchRowValues.length; i++) {
@@ -638,7 +550,21 @@ class App extends React.Component{
       }
       this.setState({ items: rows}, () => this.getData('2016')); 
     }); 
+
+    fetch(mapurl).then(response => response.json()).then(data => {
+      let batchRowValues = data.valueRanges[0].values;
+      const rows = [];
+      for(let i=1; i < batchRowValues.length; i++) {
+        let rowObject = {};
+        for(let j=0; j < batchRowValues[i].length; j++) {
+          rowObject[batchRowValues[0][j]] = batchRowValues[i][j];
+        }
+        rows.push(rowObject);
+      }
+      this.setState({ mapItems: rows}); 
+    });
   }
+
   render() {
     return (
       <div className="App">
@@ -773,7 +699,7 @@ class App extends React.Component{
                         {/*Map Chart*/ }
               <div className="col-md-12 col-xl-6 order-2 order-md-1 order-xl-1 ">
                   <div className="card c-portlet c-portlet--height-fluid">
-                  <ReactFC {...this.state.mapData} containerBackgroundOpacity ="0"/>
+                  {/* <ReactFC {...this.state.mapData} containerBackgroundOpacity ="0"/> */}
                   </div>
               </div>
 
