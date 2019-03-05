@@ -13,8 +13,8 @@ import config from './config';
 
 import './App.css';
 
-
 ReactFC.fcRoot(FusionCharts, Charts, PowerCharts, Maps, World, FusionTheme); 
+
 
 window.onload = function () {
   document.getElementById('btn-q5').style.display ="none";
