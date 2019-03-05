@@ -1,13 +1,14 @@
 {
-  "main.css": "/sales-dashboard-gsheetsapi-react/static/css/main.67d1e487.chunk.css",
-  "main.js": "/sales-dashboard-gsheetsapi-react/static/js/main.5b802098.chunk.js",
-  "main.js.map": "/sales-dashboard-gsheetsapi-react/static/js/main.5b802098.chunk.js.map",
+  "main.css": "/sales-dashboard-gsheetsapi-react/static/css/main.4e4547bf.chunk.css",
+  "main.js": "/sales-dashboard-gsheetsapi-react/static/js/main.a7cc39f3.chunk.js",
+  "main.js.map": "/sales-dashboard-gsheetsapi-react/static/js/main.a7cc39f3.chunk.js.map",
   "static/js/1.204f7052.chunk.js": "/sales-dashboard-gsheetsapi-react/static/js/1.204f7052.chunk.js",
   "static/js/1.204f7052.chunk.js.map": "/sales-dashboard-gsheetsapi-react/static/js/1.204f7052.chunk.js.map",
   "runtime~main.js": "/sales-dashboard-gsheetsapi-react/static/js/runtime~main.e5091b58.js",
   "runtime~main.js.map": "/sales-dashboard-gsheetsapi-react/static/js/runtime~main.e5091b58.js.map",
-  "static/css/main.67d1e487.chunk.css.map": "/sales-dashboard-gsheetsapi-react/static/css/main.67d1e487.chunk.css.map",
+  "static/css/main.4e4547bf.chunk.css.map": "/sales-dashboard-gsheetsapi-react/static/css/main.4e4547bf.chunk.css.map",
+  "static/media/App.css": "/sales-dashboard-gsheetsapi-react/static/media/redarrow.43aeda9f.svg",
   "index.html": "/sales-dashboard-gsheetsapi-react/index.html",
-  "precache-manifest.0a6bb84c7d7f8e3114bbc278b3efb8ad.js": "/sales-dashboard-gsheetsapi-react/precache-manifest.0a6bb84c7d7f8e3114bbc278b3efb8ad.js",
+  "precache-manifest.df71edff9cf4b5814142f327916ed190.js": "/sales-dashboard-gsheetsapi-react/precache-manifest.df71edff9cf4b5814142f327916ed190.js",
   "service-worker.js": "/sales-dashboard-gsheetsapi-react/service-worker.js"
 }
