@@ -229,7 +229,7 @@ body {
 }
 .has-up-val::before{
     content: " ";
-   background-image :url('./path.svg');
+   background-image :url('/path.svg');
     background-repeat: no-repeat; 
     position: absolute;
     left: -35px;
@@ -239,7 +239,7 @@ body {
 }
 .has-down-val::before{
     content: "";
-    background-image :url('./redarrow.svg');
+    background-image :url('/redarrow.svg');
     background-repeat: no-repeat;
     position: absolute;
     left: -35px;
