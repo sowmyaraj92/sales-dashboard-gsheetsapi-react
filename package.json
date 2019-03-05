@@ -5,15 +5,14 @@
   "homepage": "https://sowmyaraj92.github.io/sales-dashboard-gsheetsapi-react/",
   "dependencies": {
     "bootstrap": "^4.2.1",
-    "fusioncharts": "^3.13.3-sr.1",
-    "fusionmaps": "^3.13.1-sr.1",
     "gh-pages": "^2.0.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-scripts": "2.1.3"
   },
   "scripts": {
-    "deploy": "npm run build&&gh-pages -d build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -29,6 +28,8 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "react-fusioncharts": "^3.0.0"
+    "react-fusioncharts": "^3.0.0",
+    "fusioncharts": "^3.13.3-sr.1",
+    "fusionmaps": "^3.13.1-sr.1"
   }
 }

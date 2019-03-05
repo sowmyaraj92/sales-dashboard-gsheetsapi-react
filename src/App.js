@@ -785,7 +785,7 @@ class App extends React.Component{
               
                         {/*stack Chart*/ }
               <div className="col-md-6 col-xl-8 order-2 order-md-1 order-xl-1 ">
-                <div className="card c-portlet c-portlet--height-fluid">
+                <div className="card c-portlet c-portlet--height-fluid full-height">
                 <ReactFC {...this.state.stackData} containerBackgroundOpacity ="0"/>
                 </div>
               </div>
@@ -913,14 +913,14 @@ class App extends React.Component{
 
                 {/*Multi-series chart*/}
               <div className="col-md-6 col-xl-9 order-2 order-md-1 order-xl-1 ">
-                <div className="card c-portlet c-portlet--height-fluid">
+                <div className="card c-portlet c-portlet--height-fluid full-height">
                 <ReactFC {...this.state.mslineData} containerBackgroundOpacity ="0" /> 
                 </div>
               </div>
 
                 {/*Leads KPI*/}
               <div className="col-md-6 col-xl-3 order-2 order-md-1 order-xl-1 ">         
-                <div className="card c-portlet c-portlet--height-fluid c-portlet--height-fluid-half d-flex align-items-start flex-column">
+                <div className="card c-portlet c-portlet--height-fluid c-portlet--height-fluid-half d-flex align-items-start flex-column lead-card">
                 <div className="d-flex mb-auto"> 
                       <span className="oval d-flex justify-content-center ">
                       <img src={'./horn.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="16"/>

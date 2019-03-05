@@ -229,7 +229,7 @@ body {
 }
 .has-up-val::before{
     content: " ";
-   background-image :url('/path.svg');
+    background-image :url('./assets/path.svg');
     background-repeat: no-repeat; 
     position: absolute;
     left: -35px;
@@ -239,7 +239,7 @@ body {
 }
 .has-down-val::before{
     content: "";
-    background-image :url('/redarrow.svg');
+    background-image :url('./assets/redarrow.svg');
     background-repeat: no-repeat;
     position: absolute;
     left: -35px;
@@ -269,6 +269,12 @@ body {
 }
 .deals{
     margin-top: 4rem;
+}
+.full-height > * {
+    height: 100%;
+}
+.lead-card{
+    height: 285px;
 }
 
 /* Media queries */
