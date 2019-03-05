@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/my-sales/precache-manifest.80f7b9210b6422e8e1a252fc9c67283a.js"
+  "/sales-dashboard-gsheetsapi-react/precache-manifest.a87903f16afb8e07899d816b5bfa0348.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/my-sales/index.html", {
+workbox.routing.registerNavigationRoute("/sales-dashboard-gsheetsapi-react/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });

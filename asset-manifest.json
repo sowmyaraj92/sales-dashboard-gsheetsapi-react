@@ -1,13 +1,13 @@
 {
-  "main.css": "/my-sales/static/css/main.d1b6a156.chunk.css",
-  "main.js": "/my-sales/static/js/main.6b1fb70c.chunk.js",
-  "main.js.map": "/my-sales/static/js/main.6b1fb70c.chunk.js.map",
-  "static/js/1.204f7052.chunk.js": "/my-sales/static/js/1.204f7052.chunk.js",
-  "static/js/1.204f7052.chunk.js.map": "/my-sales/static/js/1.204f7052.chunk.js.map",
-  "runtime~main.js": "/my-sales/static/js/runtime~main.597039e9.js",
-  "runtime~main.js.map": "/my-sales/static/js/runtime~main.597039e9.js.map",
-  "static/css/main.d1b6a156.chunk.css.map": "/my-sales/static/css/main.d1b6a156.chunk.css.map",
-  "index.html": "/my-sales/index.html",
-  "precache-manifest.80f7b9210b6422e8e1a252fc9c67283a.js": "/my-sales/precache-manifest.80f7b9210b6422e8e1a252fc9c67283a.js",
-  "service-worker.js": "/my-sales/service-worker.js"
+  "main.css": "/sales-dashboard-gsheetsapi-react/static/css/main.d1b6a156.chunk.css",
+  "main.js": "/sales-dashboard-gsheetsapi-react/static/js/main.a5a128c4.chunk.js",
+  "main.js.map": "/sales-dashboard-gsheetsapi-react/static/js/main.a5a128c4.chunk.js.map",
+  "static/js/1.204f7052.chunk.js": "/sales-dashboard-gsheetsapi-react/static/js/1.204f7052.chunk.js",
+  "static/js/1.204f7052.chunk.js.map": "/sales-dashboard-gsheetsapi-react/static/js/1.204f7052.chunk.js.map",
+  "runtime~main.js": "/sales-dashboard-gsheetsapi-react/static/js/runtime~main.e5091b58.js",
+  "runtime~main.js.map": "/sales-dashboard-gsheetsapi-react/static/js/runtime~main.e5091b58.js.map",
+  "static/css/main.d1b6a156.chunk.css.map": "/sales-dashboard-gsheetsapi-react/static/css/main.d1b6a156.chunk.css.map",
+  "index.html": "/sales-dashboard-gsheetsapi-react/index.html",
+  "precache-manifest.a87903f16afb8e07899d816b5bfa0348.js": "/sales-dashboard-gsheetsapi-react/precache-manifest.a87903f16afb8e07899d816b5bfa0348.js",
+  "service-worker.js": "/sales-dashboard-gsheetsapi-react/service-worker.js"
 }
