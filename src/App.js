@@ -827,7 +827,7 @@ class App extends React.Component{
                   <div className="deals d-flex full-width  otherInfo align-items-center">
                     <div className="mr-auto d-flex align-items-center">
                         <div className="oval justify-content-center d-flex">
-                          < img src={'/arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
+                          < img src={'/arrow.png'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
                         </div>
                         <span className="title">DEALS:</span> 
                     </div>
@@ -871,7 +871,7 @@ class App extends React.Component{
                       
                         <div className="d-flex align-items-center mr-auto ">
                         <div className="oval justify-content-center d-flex">
-                          < img src={'/arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
+                          < img src={'/arrow.png'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
                         </div>
                         <span className="title">SOURCED:</span> 
                     </div>
@@ -944,9 +944,7 @@ class App extends React.Component{
                           </div>
                           <span className="h5 poa">so far</span>    
                           </div>
-                        </div>  
-                     
-                        
+                        </div>       
                     </div>   
                   </div>
                 </div>
