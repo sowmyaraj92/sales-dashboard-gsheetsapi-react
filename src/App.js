@@ -40,8 +40,6 @@ class App extends React.Component{
       mapItems: [],
       value : '2016',
       quarterValue :'All Quarters',    
-      quarterMap :null,
-      selectedValue: null,
       mapData : null,
       mslineData :null,
       stackData: null,
@@ -74,8 +72,6 @@ class App extends React.Component{
     let chartDataArr = [];
     let targetRevenueVal =0;
     let leadsVal = 0;
-    
-  
     let targetRevenueFlag =false;
     let oppSourced =0;
     let oppSourcedVal =0;
@@ -84,8 +80,6 @@ class App extends React.Component{
     let pipelineDeals =0;
     let pipelineValue =0;
     let prevleadsVal=0;
-
-    
 
 //KPI 1 - Target achieved
     const targetElem = document.getElementById('kpi-target');
@@ -136,11 +130,8 @@ class App extends React.Component{
               
           }
     }
-    
 
-    //Quarterly Data
-    
-    
+    //Quarterly Data 
     if(arg !== "All") { 
     chartDataArr = [];
     leadsVal = 0;
@@ -167,8 +158,7 @@ class App extends React.Component{
             oppClosedVal += parseInt(arr[i].value_OppClosed_month);
             pipelineDeals +=parseInt(arr[i].deals_Pipeline_month);
             pipelineValue+=parseInt(arr[i].value_Pipeline_month);
-            
-            
+         
             chartDataArr.push(arr[i]);
             
               if(targetRevenueFlag===false) {
@@ -178,8 +168,7 @@ class App extends React.Component{
           }
     }
   }
-
-      
+   
     //Percent of pipeline converted
     const pipelineConvert = (oppClosedVal/oppSourcedVal)*100;
     const pipelinePercent = (pipelineConvert).toFixed(2);
@@ -499,48 +488,6 @@ class App extends React.Component{
       }   
     }
 
-
-    // ********* map config start *************
-    const mapRegions = ["NA", "AS", "AF", "AU", "EU", "SA"];
-      const yearMapDataArr = this.state.mapItems.filter(function(elem) {
-        return elem.Year === arg;
-      });
-
-      // total sum of selected year
-      let yearMapData = [];
-      for(let i=0; i<mapRegions.length; i++) {
-        let val = 0;
-        for(let j=0; j<yearMapDataArr.length; j++) {
-          if(mapRegions[i] === yearMapDataArr[j]['Region']) {
-            val += parseInt(yearMapDataArr[j]['Value']);
-          }
-        }
-        yearMapData.push({
-          id: mapRegions[i],
-          value: val
-        });
-      }
-      let quarterMapData = [];
-      for(let i=0; i<mapRegions.length; i++) {
-        let val = 0;
-        for(let j=0; j<yearMapDataArr.length; j++) {
-          if(mapRegions[i] === yearMapDataArr[j]['Region'] && yearMapDataArr[j]['Quarter'] ===  arg2 /*variable name that contains value for Quarter*/ ) {
-            val += parseInt(yearMapDataArr[j]['Value']);
-          }
-        }
-        quarterMapData.push({
-          id: mapRegions[i],
-          value: val
-        });
-      }
-
-      console.log(yearMapData);
-      console.log(quarterMapData);
-
-      
-      
-    // ********* map config end *************
-
     this.setState({mslineData: chartConfigs3});
     
     //Pushing values to the KPI
@@ -641,10 +588,9 @@ class App extends React.Component{
      
      updateDashboardQuarter = (event) => {
       this.setState({quarterValue:event.target.innerText})
-        if(event.target.id === 'btn-q1'){
+        if(event.target.id === 'btn-q1')
           this.getData('Quarter1', '2016');
-          //this.getData('Quarter1');
-        }
+        
         else if(event.target.id === 'btn-q2')
           this.getData('Quarter2', '2016');
   
@@ -674,8 +620,7 @@ class App extends React.Component{
         
         else if(event.target.id === 'btn-q11')
           this.getData('QuarterEleven', '2018');
-       
-           
+         
         else if(event.target.id === 'btn-q12')
           this.getData('QuarterTwelve', '2018');  
         
@@ -845,11 +790,9 @@ class App extends React.Component{
                         {/*Map Chart*/ }
               <div className="col-md-12 col-xl-6 order-2 order-md-1 order-xl-1 ">
                   <div className="card c-portlet c-portlet--height-fluid">
-                  {/* <ReactFC {...this.state.mapData} containerBackgroundOpacity ="0"/> */}
+                  <ReactFC {...this.state.mapData} containerBackgroundOpacity ="0"/>
                   </div>
               </div>
-
-
 
               <div className="col-md-6 col-xl-3 order-1 order-md-1 order-xl-1 ">
                   <div className="card c-portlet p-0 c-portlet--height-fluid d-flex align-items-start flex-column">
