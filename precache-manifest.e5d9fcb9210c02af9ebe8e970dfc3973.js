@@ -12,19 +12,19 @@ self.__precacheManifest = [
     "url": "/sales-dashboard-gsheetsapi-react/static/js/runtime~main.e5091b58.js"
   },
   {
-    "revision": "a2ddc936fd7cb138f167",
-    "url": "/sales-dashboard-gsheetsapi-react/static/js/main.a2ddc936.chunk.js"
+    "revision": "fb3f7419b2135a0a5e44",
+    "url": "/sales-dashboard-gsheetsapi-react/static/js/main.fb3f7419.chunk.js"
   },
   {
     "revision": "204f7052acacd5c2f3f8",
     "url": "/sales-dashboard-gsheetsapi-react/static/js/1.204f7052.chunk.js"
   },
   {
-    "revision": "a2ddc936fd7cb138f167",
-    "url": "/sales-dashboard-gsheetsapi-react/static/css/main.4020502c.chunk.css"
+    "revision": "fb3f7419b2135a0a5e44",
+    "url": "/sales-dashboard-gsheetsapi-react/static/css/main.edf452f0.chunk.css"
   },
   {
-    "revision": "00d490b415a47403aa5cce8f279e773a",
+    "revision": "295e8085e87152106c17be7b25a548e4",
     "url": "/sales-dashboard-gsheetsapi-react/index.html"
   }
 ];
