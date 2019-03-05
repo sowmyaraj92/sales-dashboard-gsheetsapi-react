@@ -1,7 +1,7 @@
 {
   "main.css": "/sales-dashboard-gsheetsapi-react/static/css/main.dc18138b.chunk.css",
-  "main.js": "/sales-dashboard-gsheetsapi-react/static/js/main.84cbc76a.chunk.js",
-  "main.js.map": "/sales-dashboard-gsheetsapi-react/static/js/main.84cbc76a.chunk.js.map",
+  "main.js": "/sales-dashboard-gsheetsapi-react/static/js/main.ac2fbd17.chunk.js",
+  "main.js.map": "/sales-dashboard-gsheetsapi-react/static/js/main.ac2fbd17.chunk.js.map",
   "static/js/1.204f7052.chunk.js": "/sales-dashboard-gsheetsapi-react/static/js/1.204f7052.chunk.js",
   "static/js/1.204f7052.chunk.js.map": "/sales-dashboard-gsheetsapi-react/static/js/1.204f7052.chunk.js.map",
   "runtime~main.js": "/sales-dashboard-gsheetsapi-react/static/js/runtime~main.e5091b58.js",
@@ -9,6 +9,6 @@
   "static/css/main.dc18138b.chunk.css.map": "/sales-dashboard-gsheetsapi-react/static/css/main.dc18138b.chunk.css.map",
   "static/media/App.css": "/sales-dashboard-gsheetsapi-react/static/media/redarrow.43aeda9f.svg",
   "index.html": "/sales-dashboard-gsheetsapi-react/index.html",
-  "precache-manifest.28cfafcbdde9240e578c7c90bc48bf6c.js": "/sales-dashboard-gsheetsapi-react/precache-manifest.28cfafcbdde9240e578c7c90bc48bf6c.js",
+  "precache-manifest.bdc66a763b5039dfb0d67adc8cb37f84.js": "/sales-dashboard-gsheetsapi-react/precache-manifest.bdc66a763b5039dfb0d67adc8cb37f84.js",
   "service-worker.js": "/sales-dashboard-gsheetsapi-react/service-worker.js"
 }
