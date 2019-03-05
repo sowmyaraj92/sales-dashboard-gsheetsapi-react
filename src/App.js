@@ -499,6 +499,48 @@ class App extends React.Component{
       }   
     }
 
+
+    // ********* map config start *************
+    const mapRegions = ["NA", "AS", "AF", "AU", "EU", "SA"];
+      const yearMapDataArr = this.state.mapItems.filter(function(elem) {
+        return elem.Year === arg;
+      });
+
+      // total sum of selected year
+      let yearMapData = [];
+      for(let i=0; i<mapRegions.length; i++) {
+        let val = 0;
+        for(let j=0; j<yearMapDataArr.length; j++) {
+          if(mapRegions[i] === yearMapDataArr[j]['Region']) {
+            val += parseInt(yearMapDataArr[j]['Value']);
+          }
+        }
+        yearMapData.push({
+          id: mapRegions[i],
+          value: val
+        });
+      }
+      let quarterMapData = [];
+      for(let i=0; i<mapRegions.length; i++) {
+        let val = 0;
+        for(let j=0; j<yearMapDataArr.length; j++) {
+          if(mapRegions[i] === yearMapDataArr[j]['Region'] && yearMapDataArr[j]['Quarter'] ===  arg2 /*variable name that contains value for Quarter*/ ) {
+            val += parseInt(yearMapDataArr[j]['Value']);
+          }
+        }
+        quarterMapData.push({
+          id: mapRegions[i],
+          value: val
+        });
+      }
+
+      console.log(yearMapData);
+      console.log(quarterMapData);
+
+      
+      
+    // ********* map config end *************
+
     this.setState({mslineData: chartConfigs3});
     
     //Pushing values to the KPI
@@ -803,7 +845,7 @@ class App extends React.Component{
                         {/*Map Chart*/ }
               <div className="col-md-12 col-xl-6 order-2 order-md-1 order-xl-1 ">
                   <div className="card c-portlet c-portlet--height-fluid">
-                  <ReactFC {...this.state.mapData} containerBackgroundOpacity ="0"/>
+                  {/* <ReactFC {...this.state.mapData} containerBackgroundOpacity ="0"/> */}
                   </div>
               </div>
 
