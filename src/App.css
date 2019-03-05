@@ -273,12 +273,22 @@ body {
 .full-height > * {
     height: 100%;
 }
-.lead-card{
-    height: 285px;
+.pipeline-card > div > span > svg, .pipeline-card > div > span{
+    height: 280px !important;
 }
 
 /* Media queries */
 
+@media (max-width: 992px){
+    .map-card.full-height{
+        height: 300px !important;
+    }
+}
+@media (max-width: 767px){
+    .pipelineClosing-card.full-height{
+        height: 600px !important;
+    }
+}
 @media (min-width: 576px){
     .navbar-expand-sm .navbar-nav .nav-link {
         padding-right: 1.4rem !important;

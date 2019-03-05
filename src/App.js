@@ -30,6 +30,7 @@ window.onload = function () {
 
 const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=SalesDataSomi&majorDimension=ROWS&key=${config.apiKey}`;
 const mapurl = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=MapPlot&majorDimension=ROWS&key=${config.apiKey}`;
+const isMobile = window.innerWidth <= 992;
 
 class App extends React.Component{
   //Constructor
@@ -45,8 +46,8 @@ class App extends React.Component{
       mapData : null,
       mslineData :null,
       stackData: null,
+      stackDataMobile: null,
       showMenu: false,
- 
       targetRevenue: '-',
       leads :'-',
       opportunitySourced:'-',
@@ -319,7 +320,56 @@ class App extends React.Component{
         }
       };
 
-    this.setState({stackData: chartConfigs1});    
+
+      const chartConfigs1Mobile = {
+        type: 'stackedbar2d',
+        width: '100%',
+        height: '100%',
+        dataFormat: 'json',
+        dataSource: {
+          "chart": {
+            "theme": "fusion",
+            "showValues": "1",
+            "caption": "Pipeline/Closing",
+            "captionFontColor": "#D3DFF2",
+            "captionAlignment":"left",
+            "subcaption": "On a monthly basis",
+            "xAxisName": "Months",
+            "xAxisNameFontColor":"#81809C",
+            "yAxisName": "Price in USD",
+            "yNumberPrefix": "$",
+            "plotFillAlpha": "70",
+            "showPlotBorder": "0",
+            "showCanvasBorder": "0",
+            "xAxisLabelMode": "AUTO",
+            "showTrendlineLabels": "0",
+            "valueFontSize": "10",
+            "numDivlines": "2",
+            "bgAlpha": "0",
+            "labelFontColor":"#81809C",
+            "valueFontColor":"#D3DFF2",
+            "toolTipBgColor":"#ffff",
+          },
+          "categories": [
+            {
+              "category": stackChart_xAxis
+            }
+          ],
+          "dataset": [
+            { 
+            "seriesname": "Pipeline",
+            
+              "data": stackChart_zAxis 
+          },
+              { 
+                "seriesname": "Closed",
+                "data": stackChart_yAxis
+            }]
+          }
+        };
+
+    this.setState({stackData: chartConfigs1});   
+    this.setState({stackDataMobile: chartConfigs1Mobile}); 
 
     // ********* map config start *************
       const mapRegions = ["NA", "SA","AS", "EU", "AF", "AU" ];
@@ -658,6 +708,294 @@ class App extends React.Component{
   }
 
   render() {
+    if(isMobile) {
+return(
+  <div className="App">
+  { /* Navigation Bar */}   
+  <nav className ="navbar navbar-expand-sm text-sm-center text-md-left fixed-top">
+        <div className="navbar-brand">
+        
+        <span className="logo">S</span>
+        Sales Dashboard Mobile</div>  
+            <ul className="navbar-nav flex-row ml-sm-auto">
+              <li className="nav-item">
+                <div className="profile">
+                  <img alt="" className="mr-3 rounded-circle border" width="42"
+                  src="./Image-Tim.png" />
+                  <span className="name d-none d-sm-inline-flex">Hey, Tim </span>  
+                </div>
+              </li>
+            </ul>
+    </nav> 
+            
+    {/* 1st block */}
+    <div className="container">
+        <div className="row mb-5">
+          <div className="col-2">
+             <div className="content-title">Overview</div>
+          </div>
+
+          <div className="col text-right time-selector">
+              <ul className="list-inline">
+                <li className="list-inline-item">
+
+                  <div className="dropdown active-item">
+                    <button className="btn btn-secondary dropdown-toggle" 
+                    type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {this.state.value}
+                    </button>
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <div className="dropdown-item" value ="2018" id="btn-2018" onClick ={this.updateDashboard} >2018</div>
+                      <div className="dropdown-item" value ="2017" id="btn-2017" onClick ={this.updateDashboard} >2017</div>
+                      <div className="dropdown-item" value ="2016" id="btn-2016"onClick ={this.updateDashboard} >2016</div>
+                    </div>
+                  </div>
+                </li>
+
+        
+              <li className="list-inline-item">
+                <div className="dropdown">
+                <button className="btn btn-secondary dropdown-toggle" 
+                type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               {this.state.quarterValue}
+                </button>
+              <div className="dropdown-menu" for="navbarDropdown" aria-labelledby="navbarDropdown">
+              <div className="dropdown-item" disabled>--Select Quarter--</div>
+                <div id ="btn-q1" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 1</div>
+                  <div id ="btn-q2" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 2</div>
+                  <div id ="btn-q3" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 3</div>
+                  <div id ="btn-q4" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 4</div>
+                  <div id ="btn-q5" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 1</div>
+                  <div id ="btn-q6" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 2</div>
+                  <div id ="btn-q7" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 3</div>
+                  <div id ="btn-q8" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 4</div>
+                  <div id ="btn-q9" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 1</div>
+                  <div id ="btn-q10" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 2</div>
+                  <div id ="btn-q11" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 3</div>
+                  <div id ="btn-q12" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 4</div>
+                
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      </div>
+        
+        
+          <div className="row">
+            <div className="col-md-6 col-xl-4 order-xs-1 order-lg-1 order-xl-1">
+              <div className="card c-portlet c-portlet--height-fluid-half d-flex align-items-start flex-column">
+                <div className="d-flex"> 
+                  <span className="oval d-flex justify-content-center ">
+                  <img src={'./revenuetarget.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="20"/>
+                  </span>
+                    <p className="c-portlet-title">Revenue Target</p>  
+                </div>
+                  <div className="d-flex align-items-center mb-7 kpi-block">
+                    <span className="rectangle d-flex justify-content-center ">
+                    </span>
+                      <div id ="kpi-target" data-up="+" data-down="-"></div>
+                        <span className ="h5 mb-0">&nbsp; of target achieved</span>
+                  </div>  
+
+                      <div className="kpi-block">
+                          <div className="c-portlet-value">
+                          <span className="h1">$</span> {this.state.targetRevenue}
+                      </div>
+                      <span className="h5 poa">target this quarter</span>    
+                      </div> 
+              </div>
+
+
+            <div className="card c-portlet c-portlet--height-fluid-half d-flex align-items-start flex-column">
+             <div className="d-flex"> 
+                     <span className="oval d-flex justify-content-center ">
+                      <img src={'./revenue.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
+                     </span>
+                      <p className="c-portlet-title">Revenue </p>  
+              </div>
+            
+                    <div className="d-flex align-items-center mb-7 kpi-block">
+                    <span className="rectangle d-flex justify-content-center ">
+                      </span>
+                    <div id ="pipeline-converted" data-up="+" data-down="-"></div>
+                    <span className ="h5 mb-0">&nbsp; of pipeline converted</span>
+                    </div>  
+
+                      <div className="kpi-block">
+                          <div className="c-portlet-value">
+                          <span className="h1">$</span> {this.state.opportunityClosedVal}
+                      </div>
+                      <span className="h5 poa">so far</span>    
+                      </div> 
+                  </div>
+              </div>
+                    {/*stack Chart*/ }
+          <div className="col-md-6 col-xl-8 order-2 order-md-1 order-xl-1 ">
+            <div className="card c-portlet c-portlet--height-fluid full-height pipelineClosing-card">
+            <ReactFC {...this.state.stackDataMobile} containerBackgroundOpacity ="0"/>
+            </div>
+          </div>
+                    {/*Map Chart*/ }
+          <div className="col-md-12 col-xl-6 order-2 order-md-1 order-xl-1 ">
+              <div className="card c-portlet c-portlet--height-fluid full-height map-card">
+              <ReactFC {...this.state.mapData} containerBackgroundOpacity ="0"/>
+              </div>
+          </div>
+
+          <div className="col-md-6 col-xl-3 order-1 order-md-1 order-xl-1 ">
+              <div className="card c-portlet p-0 c-portlet--height-fluid d-flex align-items-start flex-column">
+              {/*Pipelines*/}
+
+              <div className="d-flex mb-5 pt-24 pl-24 pr-24"> 
+                     <span className="oval d-flex justify-content-center ">
+                      <img src={'./pipeline.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
+                     </span>
+                      <p className="c-portlet-title">Pipeline</p>  
+              </div>
+            
+                    <div className="d-flex mb-auto flex-column align-items-top  kpi-block pl-24 pr-24">
+                  <div className="d-flex">
+                  <span className="rectangle d-flex justify-content-center ">
+                    </span>
+
+                    <div>
+                      <span id ="opportunity-pipeline" data-up="+" data-down="-"></span>
+                      <span className ="h5 mb-0">&nbsp; of opportunities in pipeline</span>
+                    </div>
+                  </div>
+
+                    <div className="kpi-block">
+                          <div className="c-portlet-value">
+                          <span className="h1">$</span> {this.state.opportunitySourcedVal}
+                      </div>
+                      <span className="h5 poa">so far</span>    
+                      </div>
+                    </div>  
+
+              <div className="deals d-flex full-width  otherInfo align-items-center">
+                <div className="mr-auto d-flex align-items-center">
+                    <div className="oval justify-content-center d-flex">
+                      < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
+                    </div>
+                    <span className="title">DEALS:</span> 
+                </div>
+
+                      <div className="d-flex row">
+                         <div className="col d-flex">
+                         
+                         <span className="value">&nbsp;&nbsp;{this.state.dealsPipeline}</span>
+                    </div>
+                      </div> 
+              
+                      </div>
+                  </div>
+              </div>
+
+              <div className="col-md-6 col-xl-3 order-1 order-md-1 order-xl-1 ">
+              <div className="card c-portlet p-0 custom-portlet-height c-portlet--height-fluid d-flex align-items-start flex-column">
+           
+           {/*Opportunities*/}
+
+           <div className="d-flex mb-5 pt-24 pl-24 pr-24"> 
+                     <span className="oval d-flex justify-content-center ">
+                      <img src={'./opportunity.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
+                     </span>
+                      <p className="c-portlet-title">Opportunities</p>  
+              </div>
+
+              <div className="d-flex mb-auto flex-column align-items-top  kpi-block pl-24 pr-24">
+                  <div className="d-flex">
+                  <span className="rectangle d-flex justify-content-center ">
+                    </span>
+
+                    <div>
+                      <span id ="leads-converted" data-up="+" data-down="-"></span>
+                      <span className ="h5 mb-0">&nbsp;&nbsp; of leads converted to opportunities</span>
+                    </div>
+                  </div>
+                    </div> 
+                    <div className="deals d-flex full-width  otherInfo align-items-center flex-column">
+                    <div className="full-width d-flex align-items-center mb-4">
+                  
+                    <div className="d-flex align-items-center mr-auto ">
+                    <div className="oval justify-content-center d-flex">
+                      < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
+                    </div>
+                    <span className="title">SOURCED:</span> 
+                </div>
+
+                      <div className="d-flex row">
+                         <div className="col d-flex">
+                         
+                         <span className="value">&nbsp;&nbsp;{this.state.opportunitySourced}</span>
+                    </div>
+                      </div> 
+
+                    </div>
+               
+
+                      <div className="full-width d-flex align-items-center">
+                  
+                    <div className="d-flex align-items-center mr-auto ">
+                    <div className="oval justify-content-center d-flex">
+                      < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
+                    </div>
+                    <span className="title">CLOSED:</span> 
+                </div>
+
+                      <div className="d-flex row">
+                         <div className="col d-flex">
+                         
+                         <span className="value">&nbsp;&nbsp;{this.state.opportunityClosed}</span>
+                    </div>
+                      </div> 
+                    </div>
+                      </div>
+                  </div>
+                  </div>
+
+            {/*Multi-series chart*/}
+          <div className="col-md-6 col-xl-9 order-2 order-md-1 order-xl-1 ">
+            <div className="card c-portlet c-portlet--height-fluid pipeline-card full-height">
+            <ReactFC {...this.state.mslineData} containerBackgroundOpacity ="0" /> 
+            </div>
+          </div>
+
+            {/*Leads KPI*/}
+          <div className="col-md-6 col-xl-3 order-2 order-md-1 order-xl-1 ">         
+            <div className="card c-portlet c-portlet--height-fluid c-portlet--height-fluid-half d-flex align-items-start flex-column">
+            <div className="d-flex mb-auto"> 
+                  <span className="oval d-flex justify-content-center ">
+                  <img src={'./horn.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="16"/>
+                  </span>
+                    <p className="c-portlet-title">Leads</p>  
+                </div>
+
+                <div className="d-flex mb-auto flex-column align-items-top kpi-block">
+                  <div className="d-flex">
+                  <span className="rectangle d-flex justify-content-center ">
+                    </span>
+                    <div>
+                      <span id ="lead-difference" data-up="+" data-down="-"></span>
+                      <span className ="h5 mb-0">&nbsp;&nbsp; of difference from last year/quarter</span>
+                    </div>
+                  </div>
+
+                    <div className="kpi-block">
+                          <div className="c-portlet-value">
+                          <span className="h1"></span>{this.state.leads}   
+                      </div>
+                      <span className="h5 poa">so far</span>    
+                      </div>
+                    </div>       
+                </div>   
+              </div>
+            </div>
+          </div>
+  </div> /* App div ends here */   
+  );
+    } else {
     return (
       <div className="App">
       { /* Navigation Bar */}   
@@ -680,7 +1018,7 @@ class App extends React.Component{
         {/* 1st block */}
         <div className="container">
             <div className="row mb-5">
-              <div className="col">
+              <div className="col-2">
                  <div className="content-title">Overview</div>
               </div>
 
@@ -777,21 +1115,17 @@ class App extends React.Component{
                           </div>
                           <span className="h5 poa">so far</span>    
                           </div> 
-                        
-                         
                       </div>
                   </div>
-                
-              
                         {/*stack Chart*/ }
               <div className="col-md-6 col-xl-8 order-2 order-md-1 order-xl-1 ">
-                <div className="card c-portlet c-portlet--height-fluid full-height">
+                <div className="card c-portlet c-portlet--height-fluid full-height pipelineClosing-card">
                 <ReactFC {...this.state.stackData} containerBackgroundOpacity ="0"/>
                 </div>
               </div>
                         {/*Map Chart*/ }
               <div className="col-md-12 col-xl-6 order-2 order-md-1 order-xl-1 ">
-                  <div className="card c-portlet c-portlet--height-fluid">
+                  <div className="card c-portlet c-portlet--height-fluid full-height map-card">
                   <ReactFC {...this.state.mapData} containerBackgroundOpacity ="0"/>
                   </div>
               </div>
@@ -903,24 +1237,21 @@ class App extends React.Component{
                              <span className="value">&nbsp;&nbsp;{this.state.opportunityClosed}</span>
                         </div>
                           </div> 
-
                         </div>
-                   
-                  
                           </div>
                       </div>
                       </div>
 
                 {/*Multi-series chart*/}
               <div className="col-md-6 col-xl-9 order-2 order-md-1 order-xl-1 ">
-                <div className="card c-portlet c-portlet--height-fluid full-height">
+                <div className="card c-portlet c-portlet--height-fluid pipeline-card full-height">
                 <ReactFC {...this.state.mslineData} containerBackgroundOpacity ="0" /> 
                 </div>
               </div>
 
                 {/*Leads KPI*/}
               <div className="col-md-6 col-xl-3 order-2 order-md-1 order-xl-1 ">         
-                <div className="card c-portlet c-portlet--height-fluid c-portlet--height-fluid-half d-flex align-items-start flex-column lead-card">
+                <div className="card c-portlet c-portlet--height-fluid c-portlet--height-fluid-half d-flex align-items-start flex-column">
                 <div className="d-flex mb-auto"> 
                       <span className="oval d-flex justify-content-center ">
                       <img src={'./horn.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="16"/>
@@ -932,7 +1263,6 @@ class App extends React.Component{
                       <div className="d-flex">
                       <span className="rectangle d-flex justify-content-center ">
                         </span>
-
                         <div>
                           <span id ="lead-difference" data-up="+" data-down="-"></span>
                           <span className ="h5 mb-0">&nbsp;&nbsp; of difference from last year/quarter</span>
@@ -941,8 +1271,7 @@ class App extends React.Component{
 
                         <div className="kpi-block">
                               <div className="c-portlet-value">
-                              <span className="h1"></span>{this.state.leads}
-                              
+                              <span className="h1"></span>{this.state.leads}   
                           </div>
                           <span className="h5 poa">so far</span>    
                           </div>
@@ -952,8 +1281,8 @@ class App extends React.Component{
                 </div>
               </div>
       </div> /* App div ends here */   
-  
     );
+    } 
   }
 }
 
