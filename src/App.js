@@ -3,12 +3,14 @@ import React from 'react';
 import FusionCharts from 'fusioncharts';
 import Charts from 'fusioncharts/fusioncharts.charts';
 import Maps from 'fusioncharts/fusioncharts.maps';
+
 import World from 'fusionmaps/maps/es/fusioncharts.world';
 import PowerCharts from 'fusioncharts/fusioncharts.powercharts';
 import ReactFC from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 import formatNum from './format-number';
 import config from './config';
+
 import './App.css';
 
 
@@ -734,7 +736,7 @@ class App extends React.Component{
                   <div className="card c-portlet c-portlet--height-fluid-half d-flex align-items-start flex-column">
                     <div className="d-flex"> 
                       <span className="oval d-flex justify-content-center ">
-                      <img src={'/revenuetarget.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="20"/>
+                      <img src={'./revenuetarget.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="20"/>
                       </span>
                         <p className="c-portlet-title">Revenue Target</p>  
                     </div>
@@ -757,7 +759,7 @@ class App extends React.Component{
                 <div className="card c-portlet c-portlet--height-fluid-half d-flex align-items-start flex-column">
                  <div className="d-flex"> 
                          <span className="oval d-flex justify-content-center ">
-                          <img src={'/revenue.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
+                          <img src={'./revenue.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
                          </span>
                           <p className="c-portlet-title">Revenue </p>  
                   </div>
@@ -800,7 +802,7 @@ class App extends React.Component{
 
                   <div className="d-flex mb-5 pt-24 pl-24 pr-24"> 
                          <span className="oval d-flex justify-content-center ">
-                          <img src={'/pipeline.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
+                          <img src={'./pipeline.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
                          </span>
                           <p className="c-portlet-title">Pipeline</p>  
                   </div>
@@ -827,7 +829,7 @@ class App extends React.Component{
                   <div className="deals d-flex full-width  otherInfo align-items-center">
                     <div className="mr-auto d-flex align-items-center">
                         <div className="oval justify-content-center d-flex">
-                          < img src={'/arrow.png'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
+                          < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
                         </div>
                         <span className="title">DEALS:</span> 
                     </div>
@@ -850,7 +852,7 @@ class App extends React.Component{
 
                <div className="d-flex mb-5 pt-24 pl-24 pr-24"> 
                          <span className="oval d-flex justify-content-center ">
-                          <img src={'/opportunity.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
+                          <img src={'./opportunity.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
                          </span>
                           <p className="c-portlet-title">Opportunities</p>  
                   </div>
@@ -871,7 +873,7 @@ class App extends React.Component{
                       
                         <div className="d-flex align-items-center mr-auto ">
                         <div className="oval justify-content-center d-flex">
-                          < img src={'/arrow.png'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
+                          < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
                         </div>
                         <span className="title">SOURCED:</span> 
                     </div>
@@ -890,7 +892,7 @@ class App extends React.Component{
                       
                         <div className="d-flex align-items-center mr-auto ">
                         <div className="oval justify-content-center d-flex">
-                          < img src={'/arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
+                          < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
                         </div>
                         <span className="title">CLOSED:</span> 
                     </div>
@@ -921,7 +923,7 @@ class App extends React.Component{
                 <div className="card c-portlet c-portlet--height-fluid c-portlet--height-fluid-half d-flex align-items-start flex-column">
                 <div className="d-flex mb-auto"> 
                       <span className="oval d-flex justify-content-center ">
-                      <img src={'/horn.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="16"/>
+                      <img src={'./horn.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="16"/>
                       </span>
                         <p className="c-portlet-title">Leads</p>  
                     </div>
