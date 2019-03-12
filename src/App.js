@@ -3,7 +3,6 @@ import React from 'react';
 import FusionCharts from 'fusioncharts';
 import Charts from 'fusioncharts/fusioncharts.charts';
 import Maps from 'fusioncharts/fusioncharts.maps';
-
 import World from 'fusionmaps/maps/es/fusioncharts.world';
 import PowerCharts from 'fusioncharts/fusioncharts.powercharts';
 import ReactFC from 'react-fusioncharts';
@@ -28,7 +27,7 @@ window.onload = function () {
 } 
   
 
-const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=SalesDataSomi&majorDimension=ROWS&key=${config.apiKey}`;
+const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=SalesDashboardFinal&majorDimension=ROWS&key=${config.apiKey}`;
 const mapurl = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values:batchGet?ranges=MapPlot&majorDimension=ROWS&key=${config.apiKey}`;
 const isMobile = window.innerWidth <= 992;
 
@@ -42,7 +41,7 @@ class App extends React.Component{
       items: [],
       mapItems: [],
       value : '2016',
-      quarterValue :'All Quarters',    
+      quarterValue :'Select Quarter',    
       mapData : null,
       mslineData :null,
       stackData: null,
@@ -240,15 +239,19 @@ class App extends React.Component{
       let Leads1;
       let Leads;
       let centLeads;
-      if((prevleadsVal === 0))
-      Leads = 100;
-    
+      if((prevleadsVal === 0)){
+        Leads = 100;
+        document.getElementById('lead-display').style.display ="none";
+       // document.getElementById("lead-difference").insertAdjacentText ='This is the first quarter of analysis.' 
+      }  
       else 
       {
         Leads1 =(leadsVal-prevleadsVal);
         Leads= Math.abs((Leads1/prevleadsVal)*100);
+        document.getElementById('lead-display').style.display ="block";
       }       
-    
+   
+     
     if(prevleadsVal>leadsVal ) {
       leadDifferenceElem.innerHTML = Math.abs(Leads);
       leadDifferenceElem.classList.add('has-down-val');
@@ -258,6 +261,7 @@ class App extends React.Component{
       leadDifferenceElem.classList.add('has-up-val');
     }
     document.getElementById("lead-difference").innerHTML = (Leads.toFixed(2))+'%';
+
     // Array length
     let chartDataArrLen = chartDataArr.length;
     
@@ -265,12 +269,14 @@ class App extends React.Component{
     let stackChart_xAxis =[];
     let stackChart_yAxis =[];
     let stackChart_zAxis =[];
+  
 
     for (let i=0; i<chartDataArrLen; i++) {
 
       stackChart_xAxis.push({label: chartDataArr[i].month}); 
       stackChart_yAxis.push({value: chartDataArr[i].value_OppClosed_month});
       stackChart_zAxis.push({value:chartDataArr[i].value_Pipeline_month});
+
     }
 
     const chartConfigs1 = {
@@ -297,6 +303,7 @@ class App extends React.Component{
           "showTrendlineLabels": "0",
           "valueFontSize": "10",
           "numDivlines": "2",
+          "divLineAlpha": "10",
           "bgAlpha": "0",
           "labelFontColor":"#81809C",
           "valueFontColor":"#D3DFF2",
@@ -310,13 +317,13 @@ class App extends React.Component{
         "dataset": [
           { 
           "seriesname": "Pipeline",
-          
             "data": stackChart_zAxis 
         },
             { 
               "seriesname": "Closed",
               "data": stackChart_yAxis
-          }]
+          }
+        ]
         }
       };
 
@@ -345,6 +352,7 @@ class App extends React.Component{
             "showTrendlineLabels": "0",
             "valueFontSize": "10",
             "numDivlines": "2",
+            "divLineAlpha": "10",
             "bgAlpha": "0",
             "labelFontColor":"#81809C",
             "valueFontColor":"#D3DFF2",
@@ -420,13 +428,17 @@ class App extends React.Component{
      dataFormat : "JSON",
      dataSource :{
       "chart": {
-        "caption": "Sales Statistics",
+        "caption": "Sales Opportunities Closed",
+        "subcaption" :"No. of Opportunities Closed",
         "captionFontColor": "#D3DFF2",
         "captionAlignment":"left",  
         "theme": "fusion",
         "entityfillhovercolor": "#E3F2FD",
         "labelFontColor":"#81809C",
         "bgAlpha": "0",
+        "showPlotBorder": "1",
+        "showBorder":"1",
+        "borderColor":"#fffff",
         "showLabels": "1",
         "color":"#00000"
       },
@@ -440,32 +452,32 @@ class App extends React.Component{
             "minvalue": "0",
             "maxvalue": "25",
             "code": "#f2f0fc",
-            "label": "Low (0-25)",
+            "label": "Low(0-25)",
           },
           {
             "minvalue": "26",
             "maxvalue": "50",
             "code": "#d9d5f5",
-            "label": "Medium (26-100)",
+            "label": "Medium(26-100)",
           },
           {
             "minvalue": "51",
             "maxvalue": "75",
             "code": "#c0b9ef",
-            "label": "High (51-75)",
+            "label": "High(51-75)",
         
           },
           {
             "minvalue": "76",
             "maxvalue": "100",
             "code": "#9b8fe6",
-            "label": "Very High (76-100)"
+            "label": "Very High(76-100)"
           },
           {
             "minvalue": "101",
             "maxvalue": "300",
             "code": "#8374df",
-            "label": "Highest (> 100)"
+            "label": "Highest(> 100)"
           }
       ]},
         "data": mapDataArr
@@ -478,6 +490,7 @@ class App extends React.Component{
     let msChart_yAxis = [];
     let msChart_xAxis = []; 
     let msChart_zAxis =[];
+    let msChart_wAxis =[];
 
     function addLineBreak(arg) {
       return arg.split(' ').join('<br>');
@@ -488,6 +501,7 @@ class App extends React.Component{
       msChart_xAxis.push({label: addLineBreak(chartDataArr[i].month)});
       msChart_yAxis.push({value: chartDataArr[i].value_OppClosed_month});
       msChart_zAxis.push({value: chartDataArr[i].value_Pipeline_month});
+      msChart_wAxis.push({value:chartDataArr[i].value_OppSourced_month});
 
     }
 
@@ -499,15 +513,16 @@ class App extends React.Component{
       dataSource: {
         "chart": {
           "theme": "fusion",
-          "caption": "Pipeline and Closed Trajectory",
+          "caption": "Sales Pipeline and Closed Trajectory",
           "captionFontColor": "#D3DFF2",
           "captionAlignment":"left",
-          "subcaption": "(Plotting Pipeline vs Closed for a month)",
+         // "subcaption": "(Opportunities in Pipeline vs Opportunities Closed)",
           "linethickness": "2",
-          "xAxisName": "Month ",
-          "yAxisName": "Deals won",
+          "xAxisName": "Months",
+          //"yAxisName": "Deals won",
           "numberPrefix": "$",
-          "divLineAlpha": "40",
+          "divLineAlpha": "10",
+          "numDivlines": "2",
           "animation": "1",
           "legendborderalpha": "20",
           "drawCrossLine": "1",
@@ -527,14 +542,20 @@ class App extends React.Component{
           }
         ],
         "dataset": [
+
+          {
+            "seriesname": "Opportunities",
+            "anchorBgColor": "#5D62B5",
+            "data": msChart_wAxis
+          },
           {
             "seriesname": "Pipeline",
-            "anchorBgColor": "#5D62B5",
+            "anchorBgColor": "#29C3BE",
             "data": msChart_zAxis
           },
           {
             "seriesname": "Closed",
-            "anchorBgColor": "#29C3BE",
+            "anchorBgColor": "#EF6C6C",
             "data": msChart_yAxis
           }],
       }   
@@ -567,20 +588,19 @@ class App extends React.Component{
   updateDashboard = (event) => {
     this.setState({value :event.target.innerText})
     if(event.target.id === 'btn-2018'){
-      this.setState({ quarterValue :'All Quarters'});
-   
+      this.setState({ quarterValue :'Select Quarter'});
       this.getData('All', '2018');
       this.filterQuarters('2018');
     }
      
     else if(event.target.id === 'btn-2017') {
-      this.setState({ quarterValue :'All Quarters'}); 
+      this.setState({ quarterValue :'Select Quarter'}); 
       this.getData('All', '2017');
       this.filterQuarters('2017');
     
     }
     else if(event.target.id === 'btn-2016') {
-      this.setState({ quarterValue :'All Quarters'});
+      this.setState({ quarterValue :'Select Quarter'});
       this.getData('All', '2016');
       this.filterQuarters('2016');
       
@@ -640,7 +660,15 @@ class App extends React.Component{
      
      updateDashboardQuarter = (event) => {
       this.setState({quarterValue:event.target.innerText})
-        if(event.target.id === 'btn-q1')
+     
+        if((this.state.value === '2016')&& (event.target.id === 'totalQuarters'))
+        this.getData('All', '2016');
+        else if((this.state.value === '2017')&&(event.target.id === 'totalQuarters'))
+        this.getData('All', '2017');
+        else if((this.state.value === '2018')&&(event.target.id === 'totalQuarters'))
+        this.getData('All', '2018');
+
+       else if(event.target.id === 'btn-q1')
           this.getData('Quarter1', '2016');
         
         else if(event.target.id === 'btn-q2')
@@ -735,6 +763,7 @@ return(
              <div className="content-title">Overview</div>
           </div>
 
+
           <div className="col text-right time-selector">
               <ul className="list-inline">
                 <li className="list-inline-item">
@@ -760,8 +789,8 @@ return(
                {this.state.quarterValue}
                 </button>
               <div className="dropdown-menu" for="navbarDropdown" aria-labelledby="navbarDropdown">
-              <div className="dropdown-item" disabled>--Select Quarter--</div>
-                <div id ="btn-q1" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 1</div>
+              <div id ="totalQuarters" className="dropdown-item" onClick ={this.updateDashboardQuarter}>All Quarters</div>
+                   <div id ="btn-q1" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 1</div>
                   <div id ="btn-q2" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 2</div>
                   <div id ="btn-q3" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 3</div>
                   <div id ="btn-q4" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 4</div>
@@ -1000,8 +1029,7 @@ return(
       <div className="App">
       { /* Navigation Bar */}   
       <nav className ="navbar navbar-expand-sm text-sm-center text-md-left fixed-top">
-            <div className="navbar-brand">
-            
+            <div className="navbar-brand">   
             <span className="logo">S</span>
             Sales Dashboard</div>  
                 <ul className="navbar-nav flex-row ml-sm-auto">
@@ -1019,7 +1047,7 @@ return(
         <div className="container">
             <div className="row mb-5">
               <div className="col-2">
-                 <div className="content-title">Overview</div>
+                 {/* <div className="content-title">Overview</div> */}
               </div>
 
               <div className="col text-right time-selector">
@@ -1047,7 +1075,7 @@ return(
                    {this.state.quarterValue}
                     </button>
                   <div className="dropdown-menu" for="navbarDropdown" aria-labelledby="navbarDropdown">
-                  <div className="dropdown-item" disabled>--Select Quarter--</div>
+                  <div id ="totalQuarters" className="dropdown-item" onClick ={this.updateDashboardQuarter}>All Quarters</div>
                     <div id ="btn-q1" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 1</div>
                       <div id ="btn-q2" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 2</div>
                       <div id ="btn-q3" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 3</div>
@@ -1263,7 +1291,7 @@ return(
                       <div className="d-flex">
                       <span className="rectangle d-flex justify-content-center ">
                         </span>
-                        <div>
+                        <div id ="lead-display">
                           <span id ="lead-difference" data-up="+" data-down="-"></span>
                           <span className ="h5 mb-0">&nbsp;&nbsp; of difference from last year/quarter</span>
                         </div>
