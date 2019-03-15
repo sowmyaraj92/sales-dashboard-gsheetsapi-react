@@ -41,7 +41,7 @@ class App extends React.Component{
       items: [],
       mapItems: [],
       value : '2016',
-      quarterValue :'Select Quarter',    
+      quarterValue :'All Quarters',    
       mapData : null,
       mslineData :null,
       stackData: null,
@@ -84,6 +84,10 @@ class App extends React.Component{
     let prevleadsVal=0;
 
 //KPI 1 - Target achieved
+    
+    const kpiFetch =document.getElementById('added-meta-target');
+    kpiFetch.classList.remove('targetRevenue');
+
     const targetElem = document.getElementById('kpi-target');
     targetElem.classList.remove('has-up-val');
     targetElem.classList.remove('has-down-val');
@@ -97,6 +101,9 @@ class App extends React.Component{
     const leadElem = document.getElementById('leads-converted');
     leadElem.classList.remove('has-up-val');
     leadElem.classList.remove('has-down-val');
+
+    const leadsInfo =document.getElementById('added-lead--class');
+    leadsInfo.classList.remove('lead-meta--info');
 
 //KPI 4 - Pipeline converted
     const pipelineElem = document.getElementById('pipeline-converted');
@@ -148,7 +155,7 @@ class App extends React.Component{
 
     for (let i = 0; i < arrLen; i++) {
       let quarterStr = (arr[i])['quarter']; 
-  // console.log('quarter value check',quarterStr)
+  
           if (quarterStr.includes(arg)) {
             leadsVal += parseInt(arr[i].leads_month);
             prevleadsVal +=parseInt(arr[i].prev_leads_quarter); 
@@ -158,6 +165,7 @@ class App extends React.Component{
 
             oppClosed += parseInt(arr[i].opp_Closed_month);
             oppClosedVal += parseInt(arr[i].value_OppClosed_month);
+
             pipelineDeals +=parseInt(arr[i].deals_Pipeline_month);
             pipelineValue+=parseInt(arr[i].value_Pipeline_month);
          
@@ -175,12 +183,12 @@ class App extends React.Component{
     const pipelineConvert = (oppClosedVal/oppSourcedVal)*100;
     const pipelinePercent = (pipelineConvert).toFixed(2);
 
-    if(pipelineConvert < 100 ) {
+    if(pipelineConvert < 50 ) {
       pipelineElem.innerHTML = Math.abs(pipelineConvert) + '%';
       pipelineElem.classList.add('has-down-val');
     
     } 
-    else if(pipelineConvert >= 100 ) {
+    else if(pipelineConvert >= 50 ) {
       pipelineElem.innerHTML = Math.abs(pipelineConvert) + '%';
       pipelineElem.classList.add('has-up-val');
     }
@@ -192,31 +200,36 @@ class App extends React.Component{
     const oppConvert = (oppSourced/leadsVal)*100;
     const oppPercent =(oppConvert).toFixed(2);
 
-    if(oppConvert < 100 ) {
+    if(oppConvert < 40 ) {
       leadElem.innerHTML = Math.abs(oppConvert)+'%';
       leadElem.classList.add('has-down-val');
     } 
-    else if(oppConvert >= 100 ) {
+    else if(oppConvert >= 40 ) {
       leadElem.innerHTML = Math.abs(oppConvert)+'%';
       leadElem.classList.add('has-up-val');
     }
     document.getElementById("leads-converted").innerHTML = (oppConvert.toFixed(2))+'%';
 
     //Percent of targets achieved
-    const target = (oppClosedVal/targetRevenueVal)*100;
+    let target = (oppClosedVal/targetRevenueVal)*100;
+    
     const targetPercent =(target).toFixed(2);
 
     if(target < 100 ) {
+      target = 100-target;
       targetElem.innerHTML = Math.abs(target) + '%';
       targetElem.classList.add('has-down-val');
-     // targetElem.add('./redarrow.svg');
+
     } 
     else if(target >= 100 ) {
+    target = target -100;
+   // console.log("target",target);
+     
     targetElem.innerHTML = Math.abs(target) +'%';
     targetElem.classList.add('has-up-val');
     //targetElem.add('./path.svg');
     }
-
+    
     document.getElementById("kpi-target").innerHTML = (target.toFixed(2))+'%';
 
    //Percent of opportunities in pipeline
@@ -224,12 +237,12 @@ class App extends React.Component{
     const  oppPipelinePercent =(oppPipelineConvert).toFixed(2);
 
     
-    if(oppPipelineConvert < 100 ) {
+    if(oppPipelineConvert < 55 ) {
       opportunityElem.innerHTML = Math.abs(oppPipelineConvert);
       opportunityElem.classList.add('has-down-val');
       
     } 
-    else if(oppPipelineConvert >= 100 ) {
+    else if(oppPipelineConvert >= 55 ) {
       opportunityElem.innerHTML = Math.abs(oppPipelineConvert);
       opportunityElem.classList.add('has-up-val');
     }
@@ -241,14 +254,13 @@ class App extends React.Component{
       let centLeads;
       if((prevleadsVal === 0)){
         Leads = 100;
-        document.getElementById('lead-display').style.display ="none";
-       // document.getElementById("lead-difference").insertAdjacentText ='This is the first quarter of analysis.' 
+       leadsInfo.classList.add('lead-meta--info');
+      
       }  
       else 
       {
         Leads1 =(leadsVal-prevleadsVal);
         Leads= Math.abs((Leads1/prevleadsVal)*100);
-        document.getElementById('lead-display').style.display ="block";
       }       
    
      
@@ -269,6 +281,7 @@ class App extends React.Component{
     let stackChart_xAxis =[];
     let stackChart_yAxis =[];
     let stackChart_zAxis =[];
+    let stackChart_wAxis =[];
   
 
     for (let i=0; i<chartDataArrLen; i++) {
@@ -276,19 +289,19 @@ class App extends React.Component{
       stackChart_xAxis.push({label: chartDataArr[i].month}); 
       stackChart_yAxis.push({value: chartDataArr[i].value_OppClosed_month});
       stackChart_zAxis.push({value:chartDataArr[i].value_Pipeline_month});
+      stackChart_wAxis.push({value:chartDataArr[i].value_OppSourced_month});
 
     }
 
     const chartConfigs1 = {
-      type: 'stackedcolumn2d',
+      type: 'mscolumn2d',
       width: '100%',
       height: '100%',
       dataFormat: 'json',
       dataSource: {
         "chart": {
           "theme": "fusion",
-          "showValues": "1",
-          "caption": "Pipeline/Closing",
+          "caption": "Sales Funnel Overview",
           "captionFontColor": "#D3DFF2",
           "captionAlignment":"left",
           "subcaption": "On a monthly basis",
@@ -307,7 +320,9 @@ class App extends React.Component{
           "bgAlpha": "0",
           "labelFontColor":"#81809C",
           "valueFontColor":"#D3DFF2",
-          "toolTipBgColor":"#ffff",
+        
+          "plottooltext":"$$dataValue in $seriesname,$label"
+          
         },
         "categories": [
           {
@@ -315,6 +330,10 @@ class App extends React.Component{
           }
         ],
         "dataset": [
+          { 
+            "seriesname": "Opportunities",
+              "data": stackChart_wAxis 
+          },
           { 
           "seriesname": "Pipeline",
             "data": stackChart_zAxis 
@@ -329,15 +348,14 @@ class App extends React.Component{
 
 
       const chartConfigs1Mobile = {
-        type: 'stackedbar2d',
+        type: 'msbar2d',
         width: '100%',
         height: '100%',
         dataFormat: 'json',
         dataSource: {
           "chart": {
             "theme": "fusion",
-            "showValues": "1",
-            "caption": "Pipeline/Closing",
+            "caption": "Sales Funnel Overview",
             "captionFontColor": "#D3DFF2",
             "captionAlignment":"left",
             "subcaption": "On a monthly basis",
@@ -356,7 +374,8 @@ class App extends React.Component{
             "bgAlpha": "0",
             "labelFontColor":"#81809C",
             "valueFontColor":"#D3DFF2",
-            "toolTipBgColor":"#ffff",
+            "plottooltext":"$$dataValue in $seriesname,$label",
+           
           },
           "categories": [
             {
@@ -365,8 +384,11 @@ class App extends React.Component{
           ],
           "dataset": [
             { 
+              "seriesname": "Opportunities",
+                "data": stackChart_wAxis 
+            },
+            { 
             "seriesname": "Pipeline",
-            
               "data": stackChart_zAxis 
           },
               { 
@@ -428,9 +450,9 @@ class App extends React.Component{
      dataFormat : "JSON",
      dataSource :{
       "chart": {
-        "caption": "Sales Opportunities Closed",
-        "subcaption" :"No. of Opportunities Closed",
+        "caption": "Geo Distribution of Opportunities Closed",
         "captionFontColor": "#D3DFF2",
+       "alignCaptionWithCanvas":"0",
         "captionAlignment":"left",  
         "theme": "fusion",
         "entityfillhovercolor": "#E3F2FD",
@@ -438,15 +460,19 @@ class App extends React.Component{
         "bgAlpha": "0",
         "showPlotBorder": "1",
         "showBorder":"1",
-        "borderColor":"#fffff",
+        "borderColor":"#D9D9D9",
         "showLabels": "1",
-        "color":"#00000"
+        "legendCaption":"No. of Opportunities Closed",
+        "legendCaptionFontSize":"13",
+        "legendCaptionFontColor":"#81809C",
+       "entityToolText": "$lname, $value opportunities closed"
       },
 
       "colorrange": {
         "minvalue": "10",
         "gradient": "0",
         "code": "#6957da",
+        
         "color": [
           {
             "minvalue": "0",
@@ -487,10 +513,11 @@ class App extends React.Component{
     // ********* map config end *************
 
     //Multi-series chart
-    let msChart_yAxis = [];
+   // let msChart_yAxis = [];
     let msChart_xAxis = []; 
     let msChart_zAxis =[];
     let msChart_wAxis =[];
+    let msChart_vAxis =[];
 
     function addLineBreak(arg) {
       return arg.split(' ').join('<br>');
@@ -499,10 +526,11 @@ class App extends React.Component{
     for (let i=0; i<chartDataArrLen; i++) {
 
       msChart_xAxis.push({label: addLineBreak(chartDataArr[i].month)});
-      msChart_yAxis.push({value: chartDataArr[i].value_OppClosed_month});
-      msChart_zAxis.push({value: chartDataArr[i].value_Pipeline_month});
-      msChart_wAxis.push({value:chartDataArr[i].value_OppSourced_month});
-
+     // msChart_yAxis.push({value: chartDataArr[i].leads_month});
+      msChart_zAxis.push({value: chartDataArr[i].opp_Sourced_month});
+      msChart_wAxis.push({value:chartDataArr[i].deals_Pipeline_month});
+      msChart_vAxis.push({value:chartDataArr[i].opp_Closed_month})
+      
     }
 
     const chartConfigs3 = {
@@ -513,27 +541,32 @@ class App extends React.Component{
       dataSource: {
         "chart": {
           "theme": "fusion",
-          "caption": "Sales Pipeline and Closed Trajectory",
+          "caption": "Sales Opportunity Trajectory",
           "captionFontColor": "#D3DFF2",
           "captionAlignment":"left",
-         // "subcaption": "(Opportunities in Pipeline vs Opportunities Closed)",
-          "linethickness": "2",
+         "linethickness": "2",
           "xAxisName": "Months",
-          //"yAxisName": "Deals won",
-          "numberPrefix": "$",
+          "yAxisName": "No. of opportunities",
+          "yAxisNameFontSize":"12",
+          "yAxisNameFontColor":"#81809C",
           "divLineAlpha": "10",
-          "numDivlines": "2",
+          "numDivlines": "3",
           "animation": "1",
           "legendborderalpha": "20",
           "drawCrossLine": "1",
           "crossLineAlpha": "100",
-          "tooltipGrayOutColor": "#80bfff",
+          "tooltipGrayOutColor": "#909090",
           "bgAlpha": "0",
           "labelFontColor":"#81809C",
           "drawAnchors": "1",
           "anchorRadius": "3",
           "anchorSides": "2",
-          "legendItemFontSize": "13"
+          "legendItemFontSize": "13",
+        //   "tooltipColor": "#D9D9D9",
+        //   "tooltipBgColor": "#111129",
+        //   "tooltipBgAlpha": "80",
+        //  "toolTipBorderColor":"#111129",
+          "plottooltext":"$value $seriesname,$label"
         },   
         "categories": [
           {
@@ -544,19 +577,19 @@ class App extends React.Component{
         "dataset": [
 
           {
-            "seriesname": "Opportunities",
-            "anchorBgColor": "#5D62B5",
-            "data": msChart_wAxis
-          },
-          {
-            "seriesname": "Pipeline",
-            "anchorBgColor": "#29C3BE",
+            "seriesname": "Opportunities Created",
+            "anchorBgColor": "#5C62B5",
             "data": msChart_zAxis
           },
           {
-            "seriesname": "Closed",
-            "anchorBgColor": "#EF6C6C",
-            "data": msChart_yAxis
+            "seriesname": "Opportunities in Pipeline",
+            "anchorBgColor": "#28C3BE",
+            "data": msChart_wAxis
+          },
+          {
+            "seriesname": "Opportunties Closed",
+            "anchorBgColor": "#F2726F",
+            "data": msChart_vAxis
           }],
       }   
     }
@@ -568,6 +601,7 @@ class App extends React.Component{
     this.setState({targetRevenue: formatNum(targetRevenueVal)});
     this.setState({opportunitySourcedVal: formatNum(oppSourcedVal)});
     this.setState({opportunityClosedVal: formatNum(oppClosedVal)});
+    this.setState({valuesPipeline:formatNum(pipelineValue)});
     this.setState({leads: leadsVal});
 
     this.setState({opportunitySourced: oppSourced});
@@ -575,7 +609,7 @@ class App extends React.Component{
 
    this.setState({percentLeads:centLeads});
    this.setState({dealsPipeline:pipelineDeals});
-   this.setState({valuesPipeline:pipelineValue});
+  
    this.setState({oppPipelineConverted:oppPipelinePercent});  
 
    this.setState({pipelineConverted:pipelinePercent});
@@ -588,19 +622,19 @@ class App extends React.Component{
   updateDashboard = (event) => {
     this.setState({value :event.target.innerText})
     if(event.target.id === 'btn-2018'){
-      this.setState({ quarterValue :'Select Quarter'});
+      this.setState({ quarterValue :'All Quarters'});
       this.getData('All', '2018');
       this.filterQuarters('2018');
     }
      
     else if(event.target.id === 'btn-2017') {
-      this.setState({ quarterValue :'Select Quarter'}); 
+      this.setState({ quarterValue :'All Quarters'}); 
       this.getData('All', '2017');
       this.filterQuarters('2017');
     
     }
     else if(event.target.id === 'btn-2016') {
-      this.setState({ quarterValue :'Select Quarter'});
+      this.setState({ quarterValue :'All Quarters'});
       this.getData('All', '2016');
       this.filterQuarters('2016');
       
@@ -738,292 +772,303 @@ class App extends React.Component{
   render() {
     if(isMobile) {
 return(
-  <div className="App">
-  { /* Navigation Bar */}   
-  <nav className ="navbar navbar-expand-sm text-sm-center text-md-left fixed-top">
-        <div className="navbar-brand">
-        
-        <span className="logo">S</span>
-        Sales Dashboard Mobile</div>  
-            <ul className="navbar-nav flex-row ml-sm-auto">
-              <li className="nav-item">
-                <div className="profile">
-                  <img alt="" className="mr-3 rounded-circle border" width="42"
-                  src="./Image-Tim.png" />
-                  <span className="name d-none d-sm-inline-flex">Hey, Tim </span>  
+
+<div className="App">
+      { /* Navigation Bar */}   
+      <nav className ="navbar navbar-expand-sm text-sm-center text-md-left fixed-top">
+            <div className="navbar-brand">   
+            <span className="logo">S</span>
+            Sales Dashboard</div>  
+                <ul className="navbar-nav flex-row ml-sm-auto">
+                  <li className="nav-item">
+                    <div className="profile">
+                      <img alt="" className="mr-3 rounded-circle border" width="42"
+                      src="./Image-Tim.png" />
+                      <span className="name d-none d-sm-inline-flex">Hey, Tim </span>  
+                    </div>
+                  </li>
+                </ul>
+        </nav> 
+                
+        {/* 1st block */}
+        <div className="container">
+            <div className="row mb-5">
+              <div className="col-2">
+                 {/* <div className="content-title">Overview</div> */}
+              </div>
+
+              <div className="col text-right time-selector">
+                  <ul className="list-inline">
+                    <li className="list-inline-item">
+
+                      <div className="dropdown active-item">
+                        <button className="btn btn-secondary dropdown-toggle" 
+                        type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {this.state.value}
+                        </button>
+                        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <div className="dropdown-item" value ="2018" id="btn-2018" onClick ={this.updateDashboard} >2018</div>
+                          <div className="dropdown-item" value ="2017" id="btn-2017" onClick ={this.updateDashboard} >2017</div>
+                          <div className="dropdown-item" value ="2016" id="btn-2016"onClick ={this.updateDashboard} >2016</div>
+                        </div>
+                      </div>
+                    </li>
+
+            
+                  <li className="list-inline-item">
+                    <div className="dropdown">
+                    <button className="btn btn-secondary dropdown-toggle" 
+                    type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   {this.state.quarterValue}
+                    </button>
+                  <div className="dropdown-menu" for="navbarDropdown" aria-labelledby="navbarDropdown">
+                  <div id ="totalQuarters" className="dropdown-item" onClick ={this.updateDashboardQuarter}>All Quarters</div>
+                    <div id ="btn-q1" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 1</div>
+                      <div id ="btn-q2" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 2</div>
+                      <div id ="btn-q3" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 3</div>
+                      <div id ="btn-q4" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 4</div>
+                      <div id ="btn-q5" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 1</div>
+                      <div id ="btn-q6" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 2</div>
+                      <div id ="btn-q7" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 3</div>
+                      <div id ="btn-q8" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 4</div>
+                      <div id ="btn-q9" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 1</div>
+                      <div id ="btn-q10" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 2</div>
+                      <div id ="btn-q11" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 3</div>
+                      <div id ="btn-q12" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 4</div>
+                    
+                  </div>
                 </div>
               </li>
             </ul>
-    </nav> 
-            
-    {/* 1st block */}
-    <div className="container">
-        <div className="row mb-5">
-          <div className="col-2">
-             <div className="content-title">Overview</div>
           </div>
-
-
-          <div className="col text-right time-selector">
-              <ul className="list-inline">
-                <li className="list-inline-item">
-
-                  <div className="dropdown active-item">
-                    <button className="btn btn-secondary dropdown-toggle" 
-                    type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {this.state.value}
-                    </button>
-                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <div className="dropdown-item" value ="2018" id="btn-2018" onClick ={this.updateDashboard} >2018</div>
-                      <div className="dropdown-item" value ="2017" id="btn-2017" onClick ={this.updateDashboard} >2017</div>
-                      <div className="dropdown-item" value ="2016" id="btn-2016"onClick ={this.updateDashboard} >2016</div>
-                    </div>
-                  </div>
-                </li>
-
-        
-              <li className="list-inline-item">
-                <div className="dropdown">
-                <button className="btn btn-secondary dropdown-toggle" 
-                type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               {this.state.quarterValue}
-                </button>
-              <div className="dropdown-menu" for="navbarDropdown" aria-labelledby="navbarDropdown">
-              <div id ="totalQuarters" className="dropdown-item" onClick ={this.updateDashboardQuarter}>All Quarters</div>
-                   <div id ="btn-q1" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 1</div>
-                  <div id ="btn-q2" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 2</div>
-                  <div id ="btn-q3" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 3</div>
-                  <div id ="btn-q4" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 4</div>
-                  <div id ="btn-q5" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 1</div>
-                  <div id ="btn-q6" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 2</div>
-                  <div id ="btn-q7" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 3</div>
-                  <div id ="btn-q8" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 4</div>
-                  <div id ="btn-q9" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 1</div>
-                  <div id ="btn-q10" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 2</div>
-                  <div id ="btn-q11" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 3</div>
-                  <div id ="btn-q12" className="dropdown-item" onClick ={this.updateDashboardQuarter}>Quarter 4</div>
-                
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-      </div>
-        
-        
-          <div className="row">
-            <div className="col-md-6 col-xl-4 order-xs-1 order-lg-1 order-xl-1">
-              <div className="card c-portlet c-portlet--height-fluid-half d-flex align-items-start flex-column">
-                <div className="d-flex"> 
-                  <span className="oval d-flex justify-content-center ">
-                  <img src={'./revenuetarget.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="20"/>
-                  </span>
-                    <p className="c-portlet-title">Revenue Target</p>  
-                </div>
-                  <div className="d-flex align-items-center mb-7 kpi-block">
-                    <span className="rectangle d-flex justify-content-center ">
-                    </span>
-                      <div id ="kpi-target" data-up="+" data-down="-"></div>
-                        <span className ="h5 mb-0">&nbsp; of target achieved</span>
-                  </div>  
-
-                      <div className="kpi-block">
-                          <div className="c-portlet-value">
-                          <span className="h1">$</span> {this.state.targetRevenue}
-                      </div>
-                      <span className="h5 poa">target this quarter</span>    
-                      </div> 
-              </div>
-
-
-            <div className="card c-portlet c-portlet--height-fluid-half d-flex align-items-start flex-column">
-             <div className="d-flex"> 
-                     <span className="oval d-flex justify-content-center ">
-                      <img src={'./revenue.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
-                     </span>
-                      <p className="c-portlet-title">Revenue </p>  
-              </div>
+          </div>
             
-                    <div className="d-flex align-items-center mb-7 kpi-block">
-                    <span className="rectangle d-flex justify-content-center ">
+            
+              <div className="row">
+                <div className="col-md-6 col-xl-4 order-xs-1 order-lg-1 order-xl-1">
+                  <div className="card c-portlet c-portlet--height-fluid-half d-flex align-items-start flex-column">
+                    <div className="d-flex"> 
+                      <span className="oval d-flex justify-content-center ">
+                      <img src={'./revenuetarget.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="20"/>
                       </span>
-                    <div id ="pipeline-converted" data-up="+" data-down="-"></div>
-                    <span className ="h5 mb-0">&nbsp; of pipeline converted</span>
-                    </div>  
+                        <p className="c-portlet-title">Revenue Target</p>  
+                    </div>
+                      
 
-                      <div className="kpi-block">
-                          <div className="c-portlet-value">
-                          <span className="h1">$</span> {this.state.opportunityClosedVal}
-                      </div>
-                      <span className="h5 poa">so far</span>    
+                          <div className="kpi-block mt-3">
+                              <div className="c-portlet-value">
+                              <span className="h1">$</span> {this.state.targetRevenue}
+                          </div>
+
+                          <div id="added-meta-target" className="targetRevenue">
+                
+                          <span className="h5 poa meta-value-text1">Target in <span className="defaultQtr_value">{this.state.quarterValue}</span>, {this.state.value}</span>    
+                          {/* <span className="h5 poa meta-value-text2">Target in {this.state.value}</span>     */}
+                          </div>
+                          </div> 
+                          <div className="d-flex align-items-center  kpi-block mt-4 mb-2">
+                        <span className="rectangle d-flex justify-content-center ">
+                        </span>
+                          <div id ="kpi-target" data-up="&nbsp;more" data-down="&nbsp;less"></div>
+                            <span className ="h5 mb-0">&nbsp; of target achieved</span>
                       </div> 
-                  </div>
-              </div>
-                    {/*stack Chart*/ }
-          <div className="col-md-6 col-xl-8 order-2 order-md-1 order-xl-1 ">
-            <div className="card c-portlet c-portlet--height-fluid full-height pipelineClosing-card">
-            <ReactFC {...this.state.stackDataMobile} containerBackgroundOpacity ="0"/>
-            </div>
-          </div>
-                    {/*Map Chart*/ }
-          <div className="col-md-12 col-xl-6 order-2 order-md-1 order-xl-1 ">
-              <div className="card c-portlet c-portlet--height-fluid full-height map-card">
-              <ReactFC {...this.state.mapData} containerBackgroundOpacity ="0"/>
-              </div>
-          </div>
 
-          <div className="col-md-6 col-xl-3 order-1 order-md-1 order-xl-1 ">
-              <div className="card c-portlet p-0 c-portlet--height-fluid d-flex align-items-start flex-column">
-              {/*Pipelines*/}
-
-              <div className="d-flex mb-5 pt-24 pl-24 pr-24"> 
-                     <span className="oval d-flex justify-content-center ">
-                      <img src={'./pipeline.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
-                     </span>
-                      <p className="c-portlet-title">Pipeline</p>  
-              </div>
-            
-                    <div className="d-flex mb-auto flex-column align-items-top  kpi-block pl-24 pr-24">
-                  <div className="d-flex">
-                  <span className="rectangle d-flex justify-content-center ">
-                    </span>
-
-                    <div>
-                      <span id ="opportunity-pipeline" data-up="+" data-down="-"></span>
-                      <span className ="h5 mb-0">&nbsp; of opportunities in pipeline</span>
-                    </div>
                   </div>
 
-                    <div className="kpi-block">
-                          <div className="c-portlet-value">
-                          <span className="h1">$</span> {this.state.opportunitySourcedVal}
-                      </div>
-                      <span className="h5 poa">so far</span>    
-                      </div>
-                    </div>  
 
-              <div className="deals d-flex full-width  otherInfo align-items-center">
-                <div className="mr-auto d-flex align-items-center">
-                    <div className="oval justify-content-center d-flex">
-                      < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
-                    </div>
-                    <span className="title">DEALS:</span> 
+                <div className="card c-portlet c-portlet--height-fluid-half d-flex align-items-start flex-column">
+                 <div className="d-flex"> 
+                         <span className="oval d-flex justify-content-center ">
+                          <img src={'./revenue.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
+                         </span>
+                          <p className="c-portlet-title">Revenue Achieved</p>  
+                  </div>
+                
+                          <div className="kpi-block mt-3">
+                              <div className="c-portlet-value">
+                              <span className="h1">$</span> {this.state.opportunityClosedVal}
+                          </div>
+                          <span className="h5 poa">Revenue achieved from </span>
+                          
+                          <span className="meta-value">{this.state.opportunityClosed} </span>
+                          <span className="h5 poa">opportunities closed so far</span>
+                            
+                          </div> 
+                          <div className="d-flex align-items-center mt-4 mb-2 kpi-block">
+                        <span className="rectangle d-flex justify-content-center ">
+                          </span>
+                        <div id ="pipeline-converted" ></div>
+                        <span className ="h5 mb-0">&nbsp; of pipeline converted</span>
+                        </div> 
+                      </div>
+                  </div>
+                        {/*stack Chart*/ }
+              <div className="col-md-6 col-xl-8 order-2 order-md-1 order-xl-1 ">
+                <div className="card c-portlet c-portlet--height-fluid full-height pipelineClosing-card">
+                <ReactFC {...this.state.stackDataMobile} containerBackgroundOpacity ="0"/>
                 </div>
-
-                      <div className="d-flex row">
-                         <div className="col d-flex">
-                         
-                         <span className="value">&nbsp;&nbsp;{this.state.dealsPipeline}</span>
-                    </div>
-                      </div> 
-              
-                      </div>
+              </div>
+                        {/*Map Chart*/ }
+              <div className="col-md-12 col-xl-6 order-2 order-md-1 order-xl-1 ">
+                  <div className="card c-portlet c-portlet--height-fluid full-height map-card">
+                  <ReactFC {...this.state.mapData} containerBackgroundOpacity ="0"/>
                   </div>
               </div>
 
               <div className="col-md-6 col-xl-3 order-1 order-md-1 order-xl-1 ">
-              <div className="card c-portlet p-0 custom-portlet-height c-portlet--height-fluid d-flex align-items-start flex-column">
-           
-           {/*Opportunities*/}
+                  <div className="card c-portlet p-0 c-portlet--height-fluid d-flex align-items-start flex-column">
+                  {/*Pipelines*/}
 
-           <div className="d-flex mb-5 pt-24 pl-24 pr-24"> 
-                     <span className="oval d-flex justify-content-center ">
-                      <img src={'./opportunity.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
-                     </span>
-                      <p className="c-portlet-title">Opportunities</p>  
-              </div>
-
-              <div className="d-flex mb-auto flex-column align-items-top  kpi-block pl-24 pr-24">
-                  <div className="d-flex">
-                  <span className="rectangle d-flex justify-content-center ">
-                    </span>
-
-                    <div>
-                      <span id ="leads-converted" data-up="+" data-down="-"></span>
-                      <span className ="h5 mb-0">&nbsp;&nbsp; of leads converted to opportunities</span>
-                    </div>
+                  <div className="d-flex mb-5 pt-24 pl-24 pr-24"> 
+                         <span className="oval d-flex justify-content-center ">
+                          <img src={'./pipeline.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
+                         </span>
+                          <p className="c-portlet-title">Pipeline Value</p>  
                   </div>
-                    </div> 
-                    <div className="deals d-flex full-width  otherInfo align-items-center flex-column">
-                    <div className="full-width d-flex align-items-center mb-4">
-                  
-                    <div className="d-flex align-items-center mr-auto ">
-                    <div className="oval justify-content-center d-flex">
+
+                          <div className="kpi-block pl-24 pr-24">
+                              <div className="c-portlet-value">
+                              <span className="h1">$</span> {this.state.valuesPipeline}
+                          </div>
+                          <span className="h5 poa">Revenue in pipeline</span>    
+                          </div>
+
+                        <div className="d-flex mt-5 mb-auto flex-column align-items-top  kpi-block pl-24 pr-24">
+                        <div className="d-flex mt-4 mb-4 flex-column align-items-top  kpi-block otherInfo">
+                      <div className="d-flex">
+                      <span className="rectangle d-flex justify-content-center ">
                       < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
-                    </div>
-                    <span className="title">SOURCED:</span> 
-                </div>
 
-                      <div className="d-flex row">
-                         <div className="col d-flex">
-                         
-                         <span className="value">&nbsp;&nbsp;{this.state.opportunitySourced}</span>
-                    </div>
-                      </div> 
+                        </span>
+
+                        <div>
+                        <div className="title col pr-0 pl-0"><span className="value"> {this.state.dealsPipeline} </span> deals in pipeline</div>
 
                     </div>
-               
+                        </div>
 
-                      <div className="full-width d-flex align-items-center">
+                      </div>
+                      
+                      <div className="d-flex">
+                      <span className="rectangle d-flex justify-content-center ">
+                        </span>
+
+                        <div>
+                          <span id ="opportunity-pipeline"></span>
+                          <span className ="h5 mb-0">&nbsp; of opportunities in pipeline</span>
+                        </div>
+
+                      </div>
+                        </div> 
+
+
+                       
+                        </div>   
+
+                  <div className="deals d-flex full-width  otherInfo align-items-center">
+                    <div className="mr-auto d-flex align-items-center">
+                        
                   
-                    <div className="d-flex align-items-center mr-auto ">
-                    <div className="oval justify-content-center d-flex">
-                      < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
-                    </div>
-                    <span className="title">CLOSED:</span> 
-                </div>
-
-                      <div className="d-flex row">
-                         <div className="col d-flex">
-                         
-                         <span className="value">&nbsp;&nbsp;{this.state.opportunityClosed}</span>
-                    </div>
-                      </div> 
-                    </div>
+                          </div>
                       </div>
                   </div>
+
+                  <div className="col-md-6 col-xl-3 order-1 order-md-1 order-xl-1 ">
+                  <div className="card c-portlet p-0 custom-portlet-height c-portlet--height-fluid d-flex align-items-start flex-column">
+               
+               {/*Opportunities*/}
+
+               <div className="d-flex mb-5 pt-24 pl-24 pr-24"> 
+                         <span className="oval d-flex justify-content-center ">
+                          <img src={'./opportunity.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
+                         </span>
+                          <p className="c-portlet-title">Opportunities</p>  
                   </div>
 
-            {/*Multi-series chart*/}
-          <div className="col-md-6 col-xl-9 order-2 order-md-1 order-xl-1 ">
-            <div className="card c-portlet c-portlet--height-fluid pipeline-card full-height">
-            <ReactFC {...this.state.mslineData} containerBackgroundOpacity ="0" /> 
-            </div>
-          </div>
 
-            {/*Leads KPI*/}
-          <div className="col-md-6 col-xl-3 order-2 order-md-1 order-xl-1 ">         
-            <div className="card c-portlet c-portlet--height-fluid c-portlet--height-fluid-half d-flex align-items-start flex-column">
-            <div className="d-flex mb-auto"> 
-                  <span className="oval d-flex justify-content-center ">
-                  <img src={'./horn.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="16"/>
-                  </span>
-                    <p className="c-portlet-title">Leads</p>  
+                  <div className="kpi-block pl-24 pr-24">
+                              <div className="c-portlet-value">
+                              <span className="h1">$</span> {this.state.opportunitySourcedVal}
+                          </div>
+                          <span className="h5 poa">Value of opportunities</span>    
+                          </div>
+
+                  <div className="d-flex mb-auto mt-5 flex-column align-items-top  kpi-block pl-24 pr-24">
+                  <div className="d-flex mt-4 mb-4 flex-column align-items-top  kpi-block otherInfo">
+                      <div className="d-flex">
+                      <span className="rectangle d-flex justify-content-center ">
+                      < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
+
+                        </span>
+
+                        <div>
+                        <div className="title col pr-0 pl-0"><span className="value"> {this.state.opportunitySourced}</span> opportunities sourced</div>
+
+                          </div>
+                        </div>
+
+                      </div>
+
+                      
+                      <div className="d-flex">
+                      <span className="rectangle d-flex justify-content-center ">
+                        </span>
+
+                        <div>
+                          <span id ="leads-converted"></span>
+                          <span className ="h5 mb-0">&nbsp;&nbsp; of leads converted to opportunities</span>
+                        </div>
+                      </div>
+                     </div> 
+                  </div>
                 </div>
+                      
+                
+                {/*Multi-series chart*/}
+              <div className="col-md-6 col-xl-9 order-2 order-md-1 order-xl-1 ">
+                <div className="card c-portlet c-portlet--height-fluid pipeline-card full-height">
+                <ReactFC {...this.state.mslineData} containerBackgroundOpacity ="0" /> 
+                </div>
+              </div>
 
-                <div className="d-flex mb-auto flex-column align-items-top kpi-block">
-                  <div className="d-flex">
-                  <span className="rectangle d-flex justify-content-center ">
-                    </span>
-                    <div>
-                      <span id ="lead-difference" data-up="+" data-down="-"></span>
-                      <span className ="h5 mb-0">&nbsp;&nbsp; of difference from last year/quarter</span>
+                {/*Leads KPI*/}
+              <div className="col-md-6 col-xl-3 order-2 order-md-1 order-xl-1 ">         
+                <div className="card c-portlet c-portlet--height-fluid c-portlet--height-fluid-half d-flex align-items-start flex-column">
+                <div className="d-flex mb-auto"> 
+                      <span className="oval d-flex justify-content-center ">
+                      <img src={'./horn.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="16"/>
+                      </span>
+                        <p className="c-portlet-title">Leads</p>  
                     </div>
-                  </div>
 
                     <div className="kpi-block">
-                          <div className="c-portlet-value">
-                          <span className="h1"></span>{this.state.leads}   
+                              <div className="c-portlet-value">
+                              <span className="h1"></span>{this.state.leads}   
+                          </div>
+                          <span className="h5 poa">Leads sourced so far</span>    
+                          </div>
+
+                    <div className="d-flex mb-auto flex-column align-items-top kpi-block mt-4">
+                      <div id ="added-lead--class" className="d-flex lead-meta--info">
+                      <span className="rectangle d-flex justify-content-center">
+                        </span>
+                        <div id ="lead-display">
+                          <span id ="lead-difference"></span>
+                          <span className ="h5 mb-0 lead-meta--text1">&nbsp;&nbsp; of difference in leads</span>
+                          <span className="h5 mb-0 lead-meta--text2">This is the first quarter/year of the analysis..</span>
+                        </div>
                       </div>
-                      <span className="h5 poa">so far</span>    
-                      </div>
-                    </div>       
-                </div>   
+    
+                        
+                        </div>       
+                    </div>   
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-  </div> /* App div ends here */   
-  );
+              </div>
+
+);
+  
     } else {
     return (
       <div className="App">
@@ -1106,19 +1151,26 @@ return(
                       </span>
                         <p className="c-portlet-title">Revenue Target</p>  
                     </div>
-                      <div className="d-flex align-items-center mb-7 kpi-block">
-                        <span className="rectangle d-flex justify-content-center ">
-                        </span>
-                          <div id ="kpi-target" data-up="+" data-down="-"></div>
-                            <span className ="h5 mb-0">&nbsp; of target achieved</span>
-                      </div>  
+                      
 
-                          <div className="kpi-block">
+                          <div className="kpi-block mt-3">
                               <div className="c-portlet-value">
                               <span className="h1">$</span> {this.state.targetRevenue}
                           </div>
-                          <span className="h5 poa">target this quarter</span>    
+
+                          <div id="added-meta-target" className="targetRevenue">
+                
+                          <span className="h5 poa meta-value-text1">Target in <span className="defaultQtr_value">{this.state.quarterValue}</span>, {this.state.value}</span>    
+                          {/* <span className="h5 poa meta-value-text2">Target in {this.state.value}</span>     */}
+                          </div>
                           </div> 
+                          <div className="d-flex align-items-center  kpi-block mt-4 mb-2">
+                        <span className="rectangle d-flex justify-content-center ">
+                        </span>
+                          <div id ="kpi-target" data-up="&nbsp;more" data-down="&nbsp;less"></div>
+                            <span className ="h5 mb-0">&nbsp; of target achieved</span>
+                      </div> 
+
                   </div>
 
 
@@ -1127,22 +1179,25 @@ return(
                          <span className="oval d-flex justify-content-center ">
                           <img src={'./revenue.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
                          </span>
-                          <p className="c-portlet-title">Revenue </p>  
+                          <p className="c-portlet-title">Revenue Achieved</p>  
                   </div>
                 
-                        <div className="d-flex align-items-center mb-7 kpi-block">
-                        <span className="rectangle d-flex justify-content-center ">
-                          </span>
-                        <div id ="pipeline-converted" data-up="+" data-down="-"></div>
-                        <span className ="h5 mb-0">&nbsp; of pipeline converted</span>
-                        </div>  
-
-                          <div className="kpi-block">
+                          <div className="kpi-block mt-3">
                               <div className="c-portlet-value">
                               <span className="h1">$</span> {this.state.opportunityClosedVal}
                           </div>
-                          <span className="h5 poa">so far</span>    
+                          <span className="h5 poa">Revenue achieved from </span>
+                          
+                          <span className="meta-value">{this.state.opportunityClosed} </span>
+                          <span className="h5 poa">opportunities closed so far</span>
+                            
                           </div> 
+                          <div className="d-flex align-items-center mt-4 mb-2 kpi-block">
+                        <span className="rectangle d-flex justify-content-center ">
+                          </span>
+                        <div id ="pipeline-converted" ></div>
+                        <span className ="h5 mb-0">&nbsp; of pipeline converted</span>
+                        </div> 
                       </div>
                   </div>
                         {/*stack Chart*/ }
@@ -1166,42 +1221,51 @@ return(
                          <span className="oval d-flex justify-content-center ">
                           <img src={'./pipeline.svg'} alt="fireSpot" className= "img-responsive rounded-circle" width="11"/>
                          </span>
-                          <p className="c-portlet-title">Pipeline</p>  
+                          <p className="c-portlet-title">Pipeline Value</p>  
                   </div>
-                
-                        <div className="d-flex mb-auto flex-column align-items-top  kpi-block pl-24 pr-24">
+
+                          <div className="kpi-block pl-24 pr-24">
+                              <div className="c-portlet-value">
+                              <span className="h1">$</span> {this.state.valuesPipeline}
+                          </div>
+                          <span className="h5 poa">Revenue in pipeline</span>    
+                          </div>
+
+                        <div className="d-flex mt-5 mb-auto flex-column align-items-top  kpi-block pl-24 pr-24">
+                        <div className="d-flex mt-4 mb-4 flex-column align-items-top  kpi-block otherInfo">
+                      <div className="d-flex">
+                      <span className="rectangle d-flex justify-content-center ">
+                      < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
+
+                        </span>
+
+                        <div>
+                        <div className="title col pr-0 pl-0"><span className="value"> {this.state.dealsPipeline} </span> deals in pipeline</div>
+
+                    </div>
+                        </div>
+
+                      </div>
+                      
                       <div className="d-flex">
                       <span className="rectangle d-flex justify-content-center ">
                         </span>
 
                         <div>
-                          <span id ="opportunity-pipeline" data-up="+" data-down="-"></span>
+                          <span id ="opportunity-pipeline"></span>
                           <span className ="h5 mb-0">&nbsp; of opportunities in pipeline</span>
                         </div>
-                      </div>
 
-                        <div className="kpi-block">
-                              <div className="c-portlet-value">
-                              <span className="h1">$</span> {this.state.opportunitySourcedVal}
-                          </div>
-                          <span className="h5 poa">so far</span>    
-                          </div>
-                        </div>  
+                      </div>
+                        </div> 
+
+
+                       
+                        </div>   
 
                   <div className="deals d-flex full-width  otherInfo align-items-center">
                     <div className="mr-auto d-flex align-items-center">
-                        <div className="oval justify-content-center d-flex">
-                          < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
-                        </div>
-                        <span className="title">DEALS:</span> 
-                    </div>
-
-                          <div className="d-flex row">
-                             <div className="col d-flex">
-                             
-                             <span className="value">&nbsp;&nbsp;{this.state.dealsPipeline}</span>
-                        </div>
-                          </div> 
+                        
                   
                           </div>
                       </div>
@@ -1219,57 +1283,45 @@ return(
                           <p className="c-portlet-title">Opportunities</p>  
                   </div>
 
-                  <div className="d-flex mb-auto flex-column align-items-top  kpi-block pl-24 pr-24">
+
+                  <div className="kpi-block pl-24 pr-24">
+                              <div className="c-portlet-value">
+                              <span className="h1">$</span> {this.state.opportunitySourcedVal}
+                          </div>
+                          <span className="h5 poa">Value of opportunities</span>    
+                          </div>
+
+                  <div className="d-flex mb-auto mt-5 flex-column align-items-top  kpi-block pl-24 pr-24">
+                  <div className="d-flex mt-4 mb-4 flex-column align-items-top  kpi-block otherInfo">
+                      <div className="d-flex">
+                      <span className="rectangle d-flex justify-content-center ">
+                      < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
+
+                        </span>
+
+                        <div>
+                        <div className="title col pr-0 pl-0"><span className="value"> {this.state.opportunitySourced}</span> opportunities sourced</div>
+
+                          </div>
+                        </div>
+
+                      </div>
+
+                      
                       <div className="d-flex">
                       <span className="rectangle d-flex justify-content-center ">
                         </span>
 
                         <div>
-                          <span id ="leads-converted" data-up="+" data-down="-"></span>
+                          <span id ="leads-converted"></span>
                           <span className ="h5 mb-0">&nbsp;&nbsp; of leads converted to opportunities</span>
                         </div>
                       </div>
-                        </div> 
-                        <div className="deals d-flex full-width  otherInfo align-items-center flex-column">
-                        <div className="full-width d-flex align-items-center mb-4">
+                     </div> 
+                  </div>
+                </div>
                       
-                        <div className="d-flex align-items-center mr-auto ">
-                        <div className="oval justify-content-center d-flex">
-                          < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
-                        </div>
-                        <span className="title">SOURCED:</span> 
-                    </div>
-
-                          <div className="d-flex row">
-                             <div className="col d-flex">
-                             
-                             <span className="value">&nbsp;&nbsp;{this.state.opportunitySourced}</span>
-                        </div>
-                          </div> 
-
-                        </div>
-                   
-
-                          <div className="full-width d-flex align-items-center">
-                      
-                        <div className="d-flex align-items-center mr-auto ">
-                        <div className="oval justify-content-center d-flex">
-                          < img src={'./arrow.svg'} alt="fireSpot" className = "img-responsive rounded-circle float-left "/>
-                        </div>
-                        <span className="title">CLOSED:</span> 
-                    </div>
-
-                          <div className="d-flex row">
-                             <div className="col d-flex">
-                             
-                             <span className="value">&nbsp;&nbsp;{this.state.opportunityClosed}</span>
-                        </div>
-                          </div> 
-                        </div>
-                          </div>
-                      </div>
-                      </div>
-
+                
                 {/*Multi-series chart*/}
               <div className="col-md-6 col-xl-9 order-2 order-md-1 order-xl-1 ">
                 <div className="card c-portlet c-portlet--height-fluid pipeline-card full-height">
@@ -1287,29 +1339,33 @@ return(
                         <p className="c-portlet-title">Leads</p>  
                     </div>
 
-                    <div className="d-flex mb-auto flex-column align-items-top kpi-block">
-                      <div className="d-flex">
-                      <span className="rectangle d-flex justify-content-center ">
-                        </span>
-                        <div id ="lead-display">
-                          <span id ="lead-difference" data-up="+" data-down="-"></span>
-                          <span className ="h5 mb-0">&nbsp;&nbsp; of difference from last year/quarter</span>
-                        </div>
-                      </div>
-
-                        <div className="kpi-block">
+                    <div className="kpi-block">
                               <div className="c-portlet-value">
                               <span className="h1"></span>{this.state.leads}   
                           </div>
-                          <span className="h5 poa">so far</span>    
+                          <span className="h5 poa">Leads sourced so far</span>    
                           </div>
+
+                    <div className="d-flex mb-auto flex-column align-items-top kpi-block mt-4">
+                      <div id ="added-lead--class" className="d-flex lead-meta--info">
+                      <span className="rectangle d-flex justify-content-center">
+                        </span>
+                        <div id ="lead-display">
+                          <span id ="lead-difference"></span>
+                          <span className ="h5 mb-0 lead-meta--text1">&nbsp;&nbsp; of difference in leads</span>
+                          <span className="h5 mb-0 lead-meta--text2">This is the first quarter/year of the analysis..</span>
+                        </div>
+                      </div>
+    
+                        
                         </div>       
                     </div>   
                   </div>
                 </div>
               </div>
-      </div> /* App div ends here */   
-    );
+              </div> /* App div ends here */  
+              ); 
+    
     } 
   }
 }

@@ -108,7 +108,7 @@ body {
 .mb-7{
     margin-top: 3.8rem;
 }
-.kpi-block .h5{
+.kpi-block .h5, #lead-value-display .h5{
     opacity: 0.8;
     color: #8091AB;
     font-size: 12px;
@@ -167,16 +167,22 @@ body {
    padding: 24px;
 }
 .c-portlet .otherInfo .title{
-    color: #fff;
-    font-size: 1.4rem;
-    opacity: 0.7;
-    letter-spacing: 0.1rem;
+    opacity: 0.8;
+    color: #8091AB;
+    font-size: 12px;
+    letter-spacing: 0.9px;
 }
 .c-portlet .otherInfo .value{
     color: #ED9B02;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     letter-spacing: 0.1rem;
 }
+.meta-value{
+    color: #ED9B02;
+    font-size: 1.4rem;
+    letter-spacing: 0.1rem;
+}
+
 .c-portlet--height-fluid-oneThird{
     height: calc(33.33% - 20px);
 }
@@ -202,9 +208,9 @@ body {
     color: #D3DFF2;
     margin-top: 1.5rem;
 }
-.poa{
+/* .poa{
     position: absolute;
-}
+} */
 .c-portlet-changesInValue{
     font-size: 1.4rem;
     color: #ffffff30;
@@ -215,7 +221,7 @@ body {
 .has-down-val {
     color: #E84C85;
     position: relative;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
 }
 
 
@@ -223,7 +229,7 @@ body {
     position: relative;
     color: #48B884;
     position: relative;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     /* background-image :url('/path.svg');
     background-repeat: no-repeat; */
 }
@@ -249,17 +255,19 @@ body {
  }
  .has-down-val::after{
     content: ""attr(data-down)"";
-    position: absolute;
+    position: right;
     left:-8px;
     top:0;
  }
  .has-up-val::after{
     content: ""attr(data-up)"";
-    position: absolute;
+    position: right;
     left:-8px;
     top:0;
  }
-
+ .dropdown-item{
+     cursor: pointer;
+ }
 .c-portlet-changesInValue.value__up span{
     color:#41C742;
     font-size: 1.6rem;
@@ -276,7 +284,25 @@ body {
 .pipeline-card > div > span > svg, .pipeline-card > div > span{
     height: 280px !important;
 }
+.lead-meta--info > span.rectangle,.lead-meta--info #lead-display #lead-difference, .lead-meta--info .lead-meta--text1{
+  display: none !important;
+}
+#added-lead--class .lead-meta--text2{
+    display: none !important;
+}
+.lead-meta--info #lead-display .lead-meta--text2{
+    display: block !important;
+    line-height: 1.6;
+    color: #b8c1ce;
+}
 
+#added-meta-target .meta-value-text1{
+    display: block !important;
+}
+
+.meta-value-text2{
+    display:block !important;
+}
 /* Media queries */
 
 @media (max-width: 992px){
