@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/sales-dashboard-gsheetsapi-react/precache-manifest.68ff3a131512e035ef42ee9e27314c17.js"
+  "/sales-dashboard-gsheetsapi-react/precache-manifest.912c4e82a84388c462af6df824446faf.js"
 );
 
 workbox.clientsClaim();
