@@ -62,8 +62,11 @@ class App extends React.Component{
       dealsPipeline:'-',
       valuesPipeline:'-',
       oppPipelineConverted:'-',
+  
       }
   }
+
+  
   
   getData = (arg,arg2) => {
     console.log('Arg1',arg);
@@ -115,6 +118,9 @@ class App extends React.Component{
     const leadDifferenceElem = document.getElementById('lead-difference');
     leadDifferenceElem.classList.remove('has-up-val');
     leadDifferenceElem.classList.remove('has-down-val');
+
+    // const leadTime =document.getElementById('year-quarter');
+    // leadTime.classList.remove('meta-data-quarter');
     //Annual Data
     for (let i = 0; i < arrLen; i++) {
       let monthStr = (arr[i])['year']; 
@@ -212,7 +218,6 @@ class App extends React.Component{
 
     //Percent of targets achieved
     let target = (oppClosedVal/targetRevenueVal)*100;
-    
     const targetPercent =(target).toFixed(2);
 
     if(target < 100 ) {
@@ -223,8 +228,6 @@ class App extends React.Component{
     } 
     else if(target >= 100 ) {
     target = target -100;
-   // console.log("target",target);
-     
     targetElem.innerHTML = Math.abs(target) +'%';
     targetElem.classList.add('has-up-val');
     //targetElem.add('./path.svg');
@@ -274,6 +277,8 @@ class App extends React.Component{
     }
     document.getElementById("lead-difference").innerHTML = (Leads.toFixed(2))+'%';
 
+  
+
     // Array length
     let chartDataArrLen = chartDataArr.length;
     
@@ -321,7 +326,7 @@ class App extends React.Component{
           "labelFontColor":"#81809C",
           "valueFontColor":"#D3DFF2",
         
-          "plottooltext":"$$dataValue in $seriesname,$label"
+          "plottooltext":"$$dataValue $seriesname, $label"
           
         },
         "categories": [
@@ -374,7 +379,7 @@ class App extends React.Component{
             "bgAlpha": "0",
             "labelFontColor":"#81809C",
             "valueFontColor":"#D3DFF2",
-            "plottooltext":"$$dataValue in $seriesname,$label",
+            "plottooltext":"$$dataValue in $seriesname, $label",
            
           },
           "categories": [
@@ -513,7 +518,7 @@ class App extends React.Component{
     // ********* map config end *************
 
     //Multi-series chart
-   // let msChart_yAxis = [];
+  
     let msChart_xAxis = []; 
     let msChart_zAxis =[];
     let msChart_wAxis =[];
@@ -526,7 +531,6 @@ class App extends React.Component{
     for (let i=0; i<chartDataArrLen; i++) {
 
       msChart_xAxis.push({label: addLineBreak(chartDataArr[i].month)});
-     // msChart_yAxis.push({value: chartDataArr[i].leads_month});
       msChart_zAxis.push({value: chartDataArr[i].opp_Sourced_month});
       msChart_wAxis.push({value:chartDataArr[i].deals_Pipeline_month});
       msChart_vAxis.push({value:chartDataArr[i].opp_Closed_month})
@@ -562,11 +566,7 @@ class App extends React.Component{
           "anchorRadius": "3",
           "anchorSides": "2",
           "legendItemFontSize": "13",
-        //   "tooltipColor": "#D9D9D9",
-        //   "tooltipBgColor": "#111129",
-        //   "tooltipBgAlpha": "80",
-        //  "toolTipBorderColor":"#111129",
-          "plottooltext":"$value $seriesname,$label"
+          "plottooltext":"$value $seriesname, $label"
         },   
         "categories": [
           {
@@ -618,26 +618,42 @@ class App extends React.Component{
 
    
   }
-
+  
   updateDashboard = (event) => {
+
+    if(((this.state.value === '2016')|| 
+        (this.state.value === '2017') ||
+          (this.state.value === '2018')) &&
+      (this.state.quarterValue === 'All Quarters')){
+
+          document.getElementById('year-quarter').innerHTML =
+                        "<span> as compared to the last year</span>";
+                        console.log('year check')
+                       
+                  }
     this.setState({value :event.target.innerText})
     if(event.target.id === 'btn-2018'){
       this.setState({ quarterValue :'All Quarters'});
       this.getData('All', '2018');
       this.filterQuarters('2018');
+      document.getElementById('year-quarter').innerHTML = 
+      "<span> as compared to the last year</span>";
     }
      
     else if(event.target.id === 'btn-2017') {
       this.setState({ quarterValue :'All Quarters'}); 
       this.getData('All', '2017');
       this.filterQuarters('2017');
-    
+      document.getElementById('year-quarter').innerHTML = 
+      "<span> as compared to the last year</span>";
+      
     }
     else if(event.target.id === 'btn-2016') {
       this.setState({ quarterValue :'All Quarters'});
       this.getData('All', '2016');
       this.filterQuarters('2016');
-      
+      document.getElementById('year-quarter').innerHTML = 
+      "<span> as compared to the last year</span>";
     }  
      }
 
@@ -696,48 +712,109 @@ class App extends React.Component{
       this.setState({quarterValue:event.target.innerText})
      
         if((this.state.value === '2016')&& (event.target.id === 'totalQuarters'))
-        this.getData('All', '2016');
+        {
+          this.getData('All', '2016');
+        document.getElementById('year-quarter').innerHTML = 
+        "<span> as compared to the last year</span>";
+        }
         else if((this.state.value === '2017')&&(event.target.id === 'totalQuarters'))
-        this.getData('All', '2017');
+        {
+          this.getData('All', '2017');
+        document.getElementById('year-quarter').innerHTML = 
+        "<span> as compared to the last year</span>";
+        }
         else if((this.state.value === '2018')&&(event.target.id === 'totalQuarters'))
-        this.getData('All', '2018');
+        {
+          this.getData('All', '2018');
+        document.getElementById('year-quarter').innerHTML = 
+        "<span> as compared to the last year</span>";
+        }
 
        else if(event.target.id === 'btn-q1')
-          this.getData('Quarter1', '2016');
+          {
+            this.getData('Quarter1', '2016');
+          document.getElementById('year-quarter').innerHTML = 
+          "<span> as compared to the last quarter</span>";
+          }
         
         else if(event.target.id === 'btn-q2')
-          this.getData('Quarter2', '2016');
-  
+
+        { 
+           this.getData('Quarter2', '2016'); 
+         document.getElementById('year-quarter').innerHTML = 
+         "<span> as compared to the last quarter</span>";
+        }
+       
         else if(event.target.id === 'btn-q3')
-          this.getData('Quarter3', '2016'); 
-          
+        {
+            this.getData('Quarter3', '2016'); 
+          document.getElementById('year-quarter').innerHTML = 
+          "<span> as compared to the last quarter</span>";
+        }
+        
         else if(event.target.id === 'btn-q4') 
-          this.getData('Quarter4', '2016');
-    
+          {
+            this.getData('Quarter4', '2016');
+          document.getElementById('year-quarter').innerHTML = 
+          "<span> as compared to the last quarter</span>";
+          }
+         
         else if(event.target.id === 'btn-q5')
-          this.getData('Quarter5', '2017');
+          {
+            this.getData('Quarter5', '2017');
+          document.getElementById('year-quarter').innerHTML = 
+          "<span> as compared to the last quarter</span>";
+          }
         
         else if(event.target.id === 'btn-q6')
-          this.getData('Quarter6', '2017');
+          {
+            this.getData('Quarter6', '2017');
+          document.getElementById('year-quarter').innerHTML = 
+          "<span> as compared to the last quarter</span>";
+          }
         
         else if(event.target.id === 'btn-q7')
-          this.getData('Quarter7', '2017');
+          {
+            this.getData('Quarter7', '2017');
+          document.getElementById('year-quarter').innerHTML = 
+          "<span> as compared to the last quarter</span>";
+          }
         
         else if(event.target.id === 'btn-q8')
-          this.getData('Quarter8', '2017');
+          {
+            this.getData('Quarter8', '2017');
+          document.getElementById('year-quarter').innerHTML = 
+          "<span> as compared to the last quarter</span>";
+          }
+       
          
         else if(event.target.id === 'btn-q9')
-          this.getData('Quarter9', '2018');
+          {
+            this.getData('Quarter9', '2018');
+          document.getElementById('year-quarter').innerHTML = 
+          "<span> as compared to the last quarter</span>";
+          }
         
         else if(event.target.id === 'btn-q10')
-          this.getData('QuarterTen', '2018');
+          {
+            this.getData('QuarterTen', '2018');
+          document.getElementById('year-quarter').innerHTML = 
+          "<span> as compared to the last quarter</span>";
+          }
         
         else if(event.target.id === 'btn-q11')
-          this.getData('QuarterEleven', '2018');
+          {
+            this.getData('QuarterEleven', '2018');
+          document.getElementById('year-quarter').innerHTML = 
+          "<span> as compared to the last quarter</span>";
+          }
          
         else if(event.target.id === 'btn-q12')
-          this.getData('QuarterTwelve', '2018');  
-        
+         { 
+           this.getData('QuarterTwelve', '2018');  
+         document.getElementById('year-quarter').innerHTML = 
+          "<span> as compared to the last quarter</span>";
+         }
       }
        
   componentDidMount() {
@@ -1053,9 +1130,11 @@ return(
                       <span className="rectangle d-flex justify-content-center">
                         </span>
                         <div id ="lead-display">
-                          <span id ="lead-difference"></span>
-                          <span className ="h5 mb-0 lead-meta--text1">&nbsp;&nbsp; of difference in leads</span>
-                          <span className="h5 mb-0 lead-meta--text2">This is the first quarter/year of the analysis..</span>
+                          <span id ="lead-difference" data-up="&nbsp;more" data-down="&nbsp;less" ></span>
+                          <span id="year-quarter" className ="h5 mb-0 lead-meta--text1">
+                          </span>
+                        
+                          <span className="h5 mb-0 lead-meta--text2">This is the first quarter/year of the analysis...</span>
                         </div>
                       </div>
     
@@ -1104,7 +1183,7 @@ return(
                         type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {this.state.value}
                         </button>
-                        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div className="dropdown-menu"  aria-labelledby="dropdownMenuButton">
                           <div className="dropdown-item" value ="2018" id="btn-2018" onClick ={this.updateDashboard} >2018</div>
                           <div className="dropdown-item" value ="2017" id="btn-2017" onClick ={this.updateDashboard} >2017</div>
                           <div className="dropdown-item" value ="2016" id="btn-2016"onClick ={this.updateDashboard} >2016</div>
@@ -1351,9 +1430,11 @@ return(
                       <span className="rectangle d-flex justify-content-center">
                         </span>
                         <div id ="lead-display">
-                          <span id ="lead-difference"></span>
-                          <span className ="h5 mb-0 lead-meta--text1">&nbsp;&nbsp; of difference in leads</span>
-                          <span className="h5 mb-0 lead-meta--text2">This is the first quarter/year of the analysis..</span>
+                          <span id ="lead-difference" data-up="&nbsp;more" data-down="&nbsp;less" ></span>
+                          <span id="year-quarter" className ="h5 mb-0 lead-meta--text1">
+                          </span>
+                        
+                          <span className="h5 mb-0 lead-meta--text2">This is the first quarter/year of the analysis...</span>
                         </div>
                       </div>
     

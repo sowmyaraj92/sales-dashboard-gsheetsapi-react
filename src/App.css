@@ -208,9 +208,7 @@ body {
     color: #D3DFF2;
     margin-top: 1.5rem;
 }
-/* .poa{
-    position: absolute;
-} */
+
 .c-portlet-changesInValue{
     font-size: 1.4rem;
     color: #ffffff30;
@@ -230,9 +228,9 @@ body {
     color: #48B884;
     position: relative;
     font-size: 1.4rem;
-    /* background-image :url('/path.svg');
-    background-repeat: no-repeat; */
+    
 }
+
 .has-up-val::before{
     content: " ";
     background-image :url('./assets/path.svg');
@@ -265,6 +263,7 @@ body {
     left:-8px;
     top:0;
  }
+
  .dropdown-item{
      cursor: pointer;
  }
@@ -299,10 +298,14 @@ body {
 #added-meta-target .meta-value-text1{
     display: block !important;
 }
-
-.meta-value-text2{
-    display:block !important;
+/* #year-quarter .quarterVal{
+  display: none;
 }
+
+#year-quarter.meta-data-quarter .quarterVal{
+    display: block;
+} */
+
 /* Media queries */
 
 @media (max-width: 992px){
