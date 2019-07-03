@@ -1,5 +1,13 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## DESCRIPTION
+This dashboard allows the sales team to understand trends, figure out unprofitable months/quarters and discover which parts of the sales cycle need more bandwidth, process optimisation or rethinking the strategy of selling itself. The dashboard not only captures the revenue targets, revenue achieved; but also displays the different patterns of opportunities, pipeline and closed deals to ascertain predictability in revenue.
+
+## TECHNOLOGY USED
+React JS
+
+React-FusionCharts Wrapper
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -12,10 +20,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
