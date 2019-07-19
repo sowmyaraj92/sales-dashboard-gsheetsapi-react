@@ -69,8 +69,7 @@ class App extends React.Component{
   
   
   getData = (arg,arg2) => {
-    console.log('Arg1',arg);
-    console.log('Arg2',arg2);
+
     // google sheet data
     const arr = this.state.items;
     const arrLen = arr.length;
@@ -628,7 +627,6 @@ class App extends React.Component{
 
           document.getElementById('year-quarter').innerHTML =
                         "<span> as compared to the last year</span>";
-                        console.log('year check')
                        
                   }
     this.setState({value :event.target.innerText})
